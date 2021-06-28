@@ -9,22 +9,21 @@ import { BeatmapSetFolder } from '../../models/BeatmapSet';
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: 4,
-    color: theme.palette.text.primary,
-    backgroundColor: `${theme.palette.primary.dark}44`,
+    color: theme.palette.text.secondary,
+    backgroundColor: `${theme.palette.primary.dark}cc`,
     display: 'flex',
     cursor: 'pointer',
     borderRadius: '8px 0 0 8px',
-    transition:
-      'transform 0.2s ease, background-color 0.2s ease, color 0.2s ease',
+    transition: 'all 0.25s ease',
 
     '&:hover': {
       color: theme.palette.text.secondary,
       backgroundColor: `${theme.palette.primary.dark}88`,
-      transform: 'translate(8px)',
+      transform: 'scaleX(0.97) translate(5px)',
     },
   },
   text: {
-    padding: 5,
+    padding: 8,
     textAlign: 'start',
     flex: 1,
     color: 'inherit',
@@ -33,13 +32,14 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
   },
   selected: {
-    color: theme.palette.text.secondary,
-    backgroundColor: `${theme.palette.primary.dark}bb`,
+    transform: 'scaleX(0.95) translate(8px)',
+    color: theme.palette.text.primary,
+    backgroundColor: `${theme.palette.primary.light}aa`,
 
     '&:hover': {
-      transform: 'translate(8px)',
-      color: theme.palette.text.secondary,
-      backgroundColor: `${theme.palette.primary.dark}bb`,
+      transform: 'scaleX(0.95) translate(8px)',
+      color: theme.palette.text.primary,
+      backgroundColor: `${theme.palette.primary.light}aa`,
     },
   },
   diff: {

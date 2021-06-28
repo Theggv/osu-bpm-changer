@@ -140,7 +140,7 @@ const RightBlock: React.FC<RightBlockProps> = ({ selectedBeatmapSet }) => {
         justify={'space-between'}
         className={clsx(classes.displayFlex, classes.paper)}
       >
-        {/* <Grid item sm className={clsx(classes.displayFlex, classes.paper)}>
+        <Grid item sm className={clsx(classes.displayFlex, classes.paper)}>
           <Paper className={classes.container}>
             <AutoSizer>
               {({ height, width }) => (
@@ -163,7 +163,7 @@ const RightBlock: React.FC<RightBlockProps> = ({ selectedBeatmapSet }) => {
             beatmap={selectedDiff}
             folderPath={selectedBeatmapSet?.fullPath}
           />
-        </Grid> */}
+        </Grid>
       </Grid>
     </div>
   );

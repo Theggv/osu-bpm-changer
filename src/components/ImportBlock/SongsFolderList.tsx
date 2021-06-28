@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
   container: {
     flex: '1 1 auto',
-    backgroundColor: theme.palette.primary.light,
+    backgroundColor: theme.palette.primary.main,
     margin: 10,
 
     '& .ReactVirtualized__List': {
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
       },
       '&::-webkit-scrollbar-track': {
         borderRadius: 20,
-        backgroundColor: theme.palette.primary.main,
+        backgroundColor: theme.palette.primary.light,
       },
       '&::-webkit-scrollbar-thumb': {
         borderRadius: 20,
