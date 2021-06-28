@@ -11,10 +11,11 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
-import { app, BrowserWindow, shell } from 'electron';
+import { app, BrowserWindow, Menu, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
+// import MenuBuilder from './menu';
 
 export default class AppUpdater {
   constructor() {
@@ -71,9 +72,12 @@ const createWindow = async () => {
     show: false,
     width: 1024,
     height: 728,
+    minWidth: 800,
+    minHeight: 600,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       nodeIntegration: true,
+      enableRemoteModule: true,
     },
   });
 
@@ -99,6 +103,7 @@ const createWindow = async () => {
 
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
+  // Menu.setApplicationMenu(null);
 
   // Open urls in the user's browser
   mainWindow.webContents.on('new-window', (event, url) => {
