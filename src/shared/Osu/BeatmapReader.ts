@@ -1,29 +1,32 @@
 import fs from 'fs';
 
-import { OsuBeatmap, OsuBeatmapDefault, TimingPoint } from '.';
-import { Colour } from './Sections/ColoursSection';
+import { Beatmap, OsuBeatmapDefault, TimingPoint } from './Beatmap';
+import { Colour } from './Beatmap/Sections/ColoursSection';
 import {
   EventBackground,
   EventBreak,
   EventVideo,
-} from './Sections/EventsSection';
+} from './Beatmap/Sections/EventsSection';
 import {
   HitObject,
   HitObjectImpl,
   HitObjectType,
-} from './HitObjects/HitObject';
-import { HitObjectHold, HitObjectHoldImpl } from './HitObjects/HitObjectHold';
+} from './Beatmap/HitObjects/HitObject';
+import {
+  HitObjectHold,
+  HitObjectHoldImpl,
+} from './Beatmap/HitObjects/HitObjectHold';
 import {
   HitObjectSlider,
   HitObjectSliderImpl,
-} from './HitObjects/HitObjectSlider';
+} from './Beatmap/HitObjects/HitObjectSlider';
 import {
   HitObjectSpinner,
   HitObjectSpinnerImpl,
-} from './HitObjects/HitObjectSpinner';
+} from './Beatmap/HitObjects/HitObjectSpinner';
 
 export class OsuBeatmapReader {
-  public parse(path: string): Promise<OsuBeatmap> {
+  public parse(path: string): Promise<Beatmap> {
     return new Promise((resolve, reject) => {
       const beatmap = new OsuBeatmapDefault();
 
@@ -109,7 +112,7 @@ export class OsuBeatmapReader {
     return Number(str.substring(pattern.length));
   }
 
-  private parseGeneral(str: string, beatmap: OsuBeatmap) {
+  private parseGeneral(str: string, beatmap: Beatmap) {
     const [key, value] = str.split(':').map((x) => x.trim());
     const type = typeof (beatmap.general as any)[key];
 
@@ -126,7 +129,7 @@ export class OsuBeatmapReader {
     }
   }
 
-  private parseEditor(str: string, beatmap: OsuBeatmap) {
+  private parseEditor(str: string, beatmap: Beatmap) {
     const [key, value] = str.split(':').map((x) => x.trim());
     switch (key) {
       case 'Bookmarks':
@@ -141,7 +144,7 @@ export class OsuBeatmapReader {
     }
   }
 
-  private parseMetadata(str: string, beatmap: OsuBeatmap) {
+  private parseMetadata(str: string, beatmap: Beatmap) {
     const [key, value] = str.split(':').map((x) => x.trim());
 
     switch (key) {
@@ -164,12 +167,12 @@ export class OsuBeatmapReader {
     }
   }
 
-  private parseDifficulty(str: string, beatmap: OsuBeatmap) {
+  private parseDifficulty(str: string, beatmap: Beatmap) {
     const [key, value] = str.split(':').map((x) => x.trim());
     (beatmap.difficulty as any)[key] = Number(value);
   }
 
-  private parseEvents(str: string, beatmap: OsuBeatmap) {
+  private parseEvents(str: string, beatmap: Beatmap) {
     const args = str.split(',');
 
     if (args[0] === '0') {
@@ -190,7 +193,7 @@ export class OsuBeatmapReader {
     }
   }
 
-  private parseTimingPoints(str: string, beatmap: OsuBeatmap) {
+  private parseTimingPoints(str: string, beatmap: Beatmap) {
     if (!beatmap.timingPoints) beatmap.timingPoints = [];
 
     const [
@@ -218,7 +221,7 @@ export class OsuBeatmapReader {
     beatmap.timingPoints.push(timingPoint);
   }
 
-  private parseColours(str: string, beatmap: OsuBeatmap) {
+  private parseColours(str: string, beatmap: Beatmap) {
     if (!beatmap.colours) {
       beatmap.colours = { colours: [] };
     }
@@ -237,7 +240,7 @@ export class OsuBeatmapReader {
     }
   }
 
-  private parseHitObjects(str: string, beatmap: OsuBeatmap) {
+  private parseHitObjects(str: string, beatmap: Beatmap) {
     const data = str.split(',');
 
     // Hit object syntax: x,y,time,type,hitSound,objectParams,hitSample

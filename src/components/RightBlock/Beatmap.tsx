@@ -3,9 +3,10 @@ import Paper from '@material-ui/core/Paper';
 import path from 'path';
 
 import React from 'react';
-import { OsuBeatmap } from '../../models/OsuBeatmap';
-import { OsuBeatmapReader } from '../../models/OsuBeatmap/OsuBeatmapReader';
-import { EventBackground } from '../../models/OsuBeatmap/Sections/EventsSection';
+import { Beatmap } from '../../shared/Osu/Beatmap';
+import { OsuBeatmapReader } from '../../shared/Osu/BeatmapReader';
+import { EventBackground } from '../../shared/Osu/Beatmap/Sections/EventsSection';
+import { BeatmapConverter } from '../../shared/ConvertManager/BeatmapConverter';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface BeatmapProps {
   folderPath?: string;
-  beatmap?: OsuBeatmap;
+  beatmap?: Beatmap;
 }
 
 const folderPathExample =
@@ -44,7 +45,7 @@ const diffPathExample =
   folderPathExample +
   '\\Spawn Of Possession - Apparition (Mazzerin) [Blind Faith].osu';
 
-const Beatmap: React.FC<BeatmapProps> = ({ beatmap, folderPath }) => {
+const BeatmapView: React.FC<BeatmapProps> = ({ beatmap, folderPath }) => {
   const classes = useStyles();
 
   const [isLoading, setIsLoading] = React.useState(false);
@@ -74,7 +75,7 @@ const Beatmap: React.FC<BeatmapProps> = ({ beatmap, folderPath }) => {
     });
   }, [beatmap]);
 
-  if (!beatmap) return null;
+  if (!beatmap || !folderPath) return null;
 
   return (
     <Paper className={classes.root}>
@@ -90,10 +91,25 @@ const Beatmap: React.FC<BeatmapProps> = ({ beatmap, folderPath }) => {
           {beatmap.difficulty.ApproachRate.toFixed(1)} OD{' '}
           {beatmap.difficulty.OverallDifficulty.toFixed(1)} HP{' '}
           {beatmap.difficulty.HPDrainRate.toFixed(1)}
+          <div
+            onClick={async () => {
+              const task = BeatmapConverter.use(folderPath, beatmap)
+                .change('multiplier', 1.1)
+                .withProgress((value) => console.log(value));
+
+              try {
+                await task;
+              } catch (error) {
+                console.error(error);
+              }
+            }}
+          >
+            Convert to x1.1
+          </div>
         </div>
       </div>
     </Paper>
   );
 };
 
-export default Beatmap;
+export default BeatmapView;

@@ -1,13 +1,15 @@
 import { Grid, makeStyles, Paper, ThemeProvider } from '@material-ui/core';
-import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import './App.global.css';
-import ImportBlock from './components/ImportBlock';
 import clsx from 'clsx';
-import theme from './themes/themeBlue';
+import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import './App.global.css';
+import ImportBlock from '../components/ImportBlock';
+import theme from '../shared/themes/themeBlue';
 import { ipcRenderer } from 'electron';
-import RightBlock from './components/RightBlock';
-import { BeatmapSetFolder } from './models/BeatmapSet';
+import RightBlock from '../components/RightBlock';
+import { BeatmapSetFolder } from '../shared/Osu/BeatmapSet';
+import { store } from './store';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -102,14 +104,16 @@ const Hello = () => {
   );
 };
 
-export default function App() {
+const App = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <Router>
-        <Switch>
-          <Route path="/" component={Hello} />
-        </Switch>
-      </Router>
-    </ThemeProvider>
+    <Router>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <Hello />
+        </ThemeProvider>
+      </Provider>
+    </Router>
   );
-}
+};
+
+export default App;

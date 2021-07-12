@@ -1,4 +1,4 @@
-import { SerializableObject } from '../SerializableObject';
+import { SerializableObject } from '../../../utils/SerializableObject';
 
 export enum HitObjectType {
   Circle = 1 << 0,

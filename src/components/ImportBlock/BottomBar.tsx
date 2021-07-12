@@ -7,7 +7,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-end',
     color: theme.palette.text.secondary,
     backgroundColor: theme.palette.primary.dark,
-    padding: 15,
+    alignItems: 'center',
+    paddingRight: 15,
+    minHeight: 50,
   },
 }));
 

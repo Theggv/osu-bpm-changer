@@ -1,18 +1,28 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import clsx from 'clsx';
+import { remote } from 'electron';
+
+import {
+  setFolder,
+  setLoading,
+  setValid,
+  selectFolder,
+  selectIsLoading,
+  selectIsValid,
+} from './ducks';
 
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { isOsuFolder, tryFindOsuFolder } from '../../models/OsuUtils';
+import { isOsuFolder, tryFindOsuFolder } from '../../shared/Osu/OsuUtils';
 
 import RefreshIcon from '@material-ui/icons/Refresh';
 import CheckIcon from '@material-ui/icons/Check';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import CreateNewFolderIcon from '@material-ui/icons/CreateNewFolder';
-import { remote } from 'electron';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -56,40 +66,31 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface SongsPathProps {
-  onPathFound: (path: string) => void;
-}
+const useOpenFileDialog = () => {
+  const dispatch = useDispatch();
 
-const TopBar: React.FC<SongsPathProps> = ({ onPathFound }) => {
-  const classes = useStyles();
-
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [isValid, setIsValid] = React.useState(false);
-  const [path, setPath] = React.useState('');
+  const isLoading = useSelector(selectIsLoading);
+  const isValid = useSelector(selectIsValid);
+  const path = useSelector(selectFolder);
 
   React.useEffect(() => {
     tryFindPath();
   }, []);
 
-  React.useEffect(() => {
-    if (path) onPathFound(path);
-  }, [path]);
-
   const tryFindPath = async () => {
-    setIsLoading(true);
-    setIsValid(false);
+    dispatch(setLoading(true));
+    dispatch(setValid(false));
 
     const folder = await tryFindOsuFolder();
 
-    setIsLoading(false);
+    dispatch(setLoading(false));
 
     if (folder) {
       try {
-        setIsValid(await isOsuFolder(folder));
-        setPath(folder);
+        dispatch(setFolder(folder));
+        dispatch(setValid(await isOsuFolder(folder)));
       } catch (err) {
-        // console.error(err);
-        setIsValid(false);
+        dispatch(setValid(false));
       }
     }
   };
@@ -104,31 +105,44 @@ const TopBar: React.FC<SongsPathProps> = ({ onPathFound }) => {
         properties: ['openDirectory'],
       })
       .then(async (result) => {
-        setIsLoading(false);
+        dispatch(setLoading(false));
 
         if (!result.filePaths.length) return;
 
-        setIsValid(false);
-        setPath(result.filePaths[0]);
+        dispatch(setValid(false));
+        dispatch(setFolder(result.filePaths[0]));
 
         isOsuFolder(result.filePaths[0])
-          .then((value) => setIsValid(value))
-          .catch(() => {
-            // console.error(err);
-          });
+          .then((value) => dispatch(setValid(value)))
+          .catch((err) => console.error(err));
       })
       .catch((err) => console.error(err));
   };
 
+  return {
+    isLoading,
+    isValid,
+    path,
+    tryFindPath,
+    bind: {
+      onClick: clickFileDialog,
+    },
+  };
+};
+
+const OsuFolder: React.FC = () => {
+  const classes = useStyles();
+  const dialog = useOpenFileDialog();
+
   return (
     <div className={classes.root}>
-      {isLoading ? (
+      {dialog.isLoading ? (
         <CircularProgress
           size={20}
           className={classes.loader}
           color={'secondary'}
         />
-      ) : isValid ? (
+      ) : dialog.isValid ? (
         <CheckIcon className={clsx(classes.valid)} color={'secondary'} />
       ) : (
         <ErrorOutlineIcon
@@ -137,28 +151,24 @@ const TopBar: React.FC<SongsPathProps> = ({ onPathFound }) => {
         />
       )}
       <div className={classes.rightBlock}>
-        {isLoading ? null : (
+        {dialog.isLoading ? null : (
           <Typography className={classes.textColor} variant={'body2'}>
-            {isValid
-              ? path
-              : path
-              ? `${path} is not osu! folder`
+            {dialog.isValid
+              ? dialog.path
+              : dialog.path
+              ? `${dialog.path} is not osu! folder`
               : 'osu! folder was not found'}
           </Typography>
         )}
       </div>
-      {!isLoading && (
+      {!dialog.isLoading && (
         <div className={classes.buttonsBlock}>
-          {!isValid && (
-            <IconButton size={'small'} onClick={tryFindPath}>
+          {!dialog.isValid && (
+            <IconButton size={'small'} onClick={dialog.tryFindPath}>
               <RefreshIcon className={classes.textColor} />
             </IconButton>
           )}
-          <IconButton
-            size={'small'}
-            component={'label'}
-            onClick={clickFileDialog}
-          >
+          <IconButton size={'small'} component={'label'} {...dialog.bind}>
             <CreateNewFolderIcon className={classes.textColor} />
           </IconButton>
         </div>
@@ -167,4 +177,4 @@ const TopBar: React.FC<SongsPathProps> = ({ onPathFound }) => {
   );
 };
 
-export default TopBar;
+export default OsuFolder;

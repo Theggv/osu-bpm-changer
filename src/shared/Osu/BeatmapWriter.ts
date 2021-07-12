@@ -1,15 +1,15 @@
 import fs from 'fs';
 
-import { OsuBeatmap } from '.';
-import { Colour } from './Sections/ColoursSection';
+import { Beatmap } from './Beatmap';
+import { Colour } from './Beatmap/Sections/ColoursSection';
 import {
   EventBackground,
   EventBreak,
   EventVideo,
-} from './Sections/EventsSection';
+} from './Beatmap/Sections/EventsSection';
 
 export class OsuBeatmapWriter {
-  public write(path: string, beatmap: OsuBeatmap): Promise<void> {
+  public write(path: string, beatmap: Beatmap): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       let data =
         this.writeVersion(beatmap) +
@@ -29,11 +29,11 @@ export class OsuBeatmapWriter {
     });
   }
 
-  private writeVersion(beatmap: OsuBeatmap): string {
+  private writeVersion(beatmap: Beatmap): string {
     return 'osu file format v' + beatmap.formatVersion + '\n\n';
   }
 
-  private writeGeneral(beatmap: OsuBeatmap): string {
+  private writeGeneral(beatmap: Beatmap): string {
     let data = '[General]\n';
 
     for (let [key, value] of Object.entries(beatmap.general)) {
@@ -43,7 +43,7 @@ export class OsuBeatmapWriter {
     return data + '\n';
   }
 
-  private writeEditor(beatmap: OsuBeatmap): string {
+  private writeEditor(beatmap: Beatmap): string {
     let data = '[Editor]\n';
 
     for (let [key, value] of Object.entries(beatmap.editor)) {
@@ -57,7 +57,7 @@ export class OsuBeatmapWriter {
     return data + '\n';
   }
 
-  private writeMetadata(beatmap: OsuBeatmap): string {
+  private writeMetadata(beatmap: Beatmap): string {
     let data = '[Metadata]\n';
 
     for (let [key, value] of Object.entries(beatmap.metadata)) {
@@ -71,7 +71,7 @@ export class OsuBeatmapWriter {
     return data + '\n';
   }
 
-  private writeDifficulty(beatmap: OsuBeatmap): string {
+  private writeDifficulty(beatmap: Beatmap): string {
     let data = '[Difficulty]\n';
 
     for (let [key, value] of Object.entries(beatmap.difficulty)) {
@@ -81,7 +81,7 @@ export class OsuBeatmapWriter {
     return data + '\n';
   }
 
-  private writeEvents(beatmap: OsuBeatmap): string {
+  private writeEvents(beatmap: Beatmap): string {
     let data = '[Events]\n';
 
     data += '//Background and Video events\n';
@@ -110,7 +110,7 @@ export class OsuBeatmapWriter {
     return data + '\n';
   }
 
-  private writeTimingPoints(beatmap: OsuBeatmap): string {
+  private writeTimingPoints(beatmap: Beatmap): string {
     if (!beatmap.timingPoints) return '';
 
     let data = '[TimingPoints]\n';
@@ -139,7 +139,7 @@ export class OsuBeatmapWriter {
     return data + '\n';
   }
 
-  private writeColours(beatmap: OsuBeatmap): string {
+  private writeColours(beatmap: Beatmap): string {
     if (!beatmap.colours) return '';
 
     let data = '[Colours]\n';
@@ -165,7 +165,7 @@ export class OsuBeatmapWriter {
     return data + '\n';
   }
 
-  private writeHitObjects(beatmap: OsuBeatmap): string {
+  private writeHitObjects(beatmap: Beatmap): string {
     let data = '[HitObjects]\n';
 
     for (let hitObject of beatmap.hitObjects) {

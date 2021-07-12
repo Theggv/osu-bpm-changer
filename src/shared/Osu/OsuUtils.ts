@@ -2,6 +2,7 @@ import path from 'path';
 import find from 'find-process';
 import fs from 'fs';
 import { BeatmapSetFolder } from './BeatmapSet';
+import { Beatmap } from './Beatmap';
 
 export const tryFindOsuFolder = async (): Promise<string | null> => {
   try {
@@ -91,6 +92,13 @@ export const parseSongFolder = (
       title: matches![3].replaceAll('[no video]', '').trim(),
     };
   }
-  
+
   return {};
+};
+
+export const generateFileName = (beatmap: Beatmap): string => {
+  return (
+    `${beatmap.metadata.Artist} - ${beatmap.metadata.Title} ` +
+    `(${beatmap.metadata.Creator}) [${beatmap.metadata.Version}].osu`
+  );
 };

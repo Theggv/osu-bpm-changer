@@ -9,15 +9,18 @@ import {
   ListRowProps,
   ListRowRenderer,
 } from 'react-virtualized';
-import { BeatmapSetFolder, readMapset } from '../../models/BeatmapSet';
-import { OsuBeatmap } from '../../models/OsuBeatmap';
-import Beatmap from './Beatmap';
+import { BeatmapSetFolder, readMapset } from '../../shared/Osu/BeatmapSet';
+import { Beatmap } from '../../shared/Osu/Beatmap';
+import BeatmapView from './Beatmap';
+import { TaskManager } from '../../features/TaskManager';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flex: 1,
     flexDirection: 'column',
+  },
+  margin: {
     margin: 10,
     marginTop: 5,
   },
@@ -71,10 +74,10 @@ interface RightBlockProps {
 const RightBlock: React.FC<RightBlockProps> = ({ selectedBeatmapSet }) => {
   const classes = useStyles();
 
-  const [diffs, setDiffs] = React.useState<OsuBeatmap[]>([]);
-  const [selectedDiff, setSelectedDiff] = React.useState<
-    OsuBeatmap | undefined
-  >(undefined);
+  const [diffs, setDiffs] = React.useState<Beatmap[]>([]);
+  const [selectedDiff, setSelectedDiff] = React.useState<Beatmap | undefined>(
+    undefined
+  );
 
   const cache = new CellMeasurerCache({
     fixedWidth: true,
@@ -113,7 +116,7 @@ const RightBlock: React.FC<RightBlockProps> = ({ selectedBeatmapSet }) => {
         {() => (
           <div style={style}>
             <Paper
-              className={clsx(classes.root)}
+              className={clsx(classes.root, classes.margin)}
               elevation={2}
               onClick={() => setSelectedDiff(item)}
             >
@@ -138,7 +141,7 @@ const RightBlock: React.FC<RightBlockProps> = ({ selectedBeatmapSet }) => {
         spacing={1}
         direction={'column'}
         justify={'space-between'}
-        className={clsx(classes.displayFlex, classes.paper)}
+        className={clsx(classes.displayFlex, classes.margin, classes.paper)}
       >
         <Grid item sm className={clsx(classes.displayFlex, classes.paper)}>
           <Paper className={classes.container}>
@@ -159,12 +162,13 @@ const RightBlock: React.FC<RightBlockProps> = ({ selectedBeatmapSet }) => {
           </Paper>
         </Grid>
         <Grid item sm className={clsx(classes.displayFlex, classes.paper)}>
-          <Beatmap
+          <BeatmapView
             beatmap={selectedDiff}
             folderPath={selectedBeatmapSet?.fullPath}
           />
         </Grid>
       </Grid>
+      <TaskManager />
     </div>
   );
 };

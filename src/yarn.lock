@@ -2,3 +2,12 @@
 # yarn lockfile v1
 
 
+"@types/app-root-path@^1.2.4":
+  "integrity" "sha1-p4twMoKzKsVN52j1US7MNWmRncc="
+  "resolved" "https://registry.npmjs.org/@types/app-root-path/-/app-root-path-1.2.4.tgz"
+  "version" "1.2.4"
+
+"@types/lodash@^4.14.170":
+  "integrity" "sha512-bpcvu/MKHHeYX+qeEN8GE7DIravODWdACVA1ctevD8CN24RhPZIKMn9ntfAsrvLfSX3cR5RrBKAbYm9bGs0A+Q=="
+  "resolved" "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.170.tgz"
+  "version" "4.14.170"

@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
-import { OsuBeatmap } from './OsuBeatmap';
-import { OsuBeatmapReader } from './OsuBeatmap/OsuBeatmapReader';
+import { Beatmap } from './Beatmap';
+import { OsuBeatmapReader } from './BeatmapReader';
 
 export interface BeatmapSetFolder {
   beatmapId?: number;
@@ -13,7 +13,7 @@ export interface BeatmapSetFolder {
 
 export const readMapset = (
   beatmapSet: BeatmapSetFolder
-): Promise<OsuBeatmap[]> => {
+): Promise<Beatmap[]> => {
   return new Promise((resolve, reject) => {
     fs.readdir(beatmapSet.fullPath, { withFileTypes: true }, (err, files) => {
       if (err) reject(err);

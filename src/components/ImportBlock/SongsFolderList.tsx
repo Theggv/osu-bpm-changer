@@ -1,4 +1,6 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+
 import {
   AutoSizer,
   CellMeasurer,
@@ -13,10 +15,11 @@ import Container from '@material-ui/core/Container';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { readSongsFolder } from '../../models/OsuUtils';
+import { readSongsFolder } from '../../shared/Osu/OsuUtils';
 import BottomBar from './BottomBar';
 import SongFolder from './SongFolder';
-import { BeatmapSetFolder } from '../../models/BeatmapSet';
+import { BeatmapSetFolder } from '../../shared/Osu/BeatmapSet';
+import { selectFolder } from '../../shared/selectors/OsuFolder';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,16 +51,15 @@ const useStyles = makeStyles((theme) => ({
 
 interface SongsFolderListProps {
   filter: string;
-  osuSongsFolder?: string;
   onFolderSelected: (folder: BeatmapSetFolder) => void;
 }
 
 const SongsFolderList: React.FC<SongsFolderListProps> = ({
-  osuSongsFolder,
   filter,
   onFolderSelected,
 }) => {
   const classes = useStyles();
+  const osuSongsFolder = useSelector(selectFolder);
 
   const [songs, setSongs] = React.useState<BeatmapSetFolder[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);

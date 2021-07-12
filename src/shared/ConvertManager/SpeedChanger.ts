@@ -1,8 +1,8 @@
-import { OsuBeatmap, TimingPoint } from './OsuBeatmap';
-import { EventBreak } from './OsuBeatmap/Sections/EventsSection';
-import { HitObjectType } from './OsuBeatmap/HitObjects/HitObject';
-import { HitObjectHold } from './OsuBeatmap/HitObjects/HitObjectHold';
-import { HitObjectSpinner } from './OsuBeatmap/HitObjects/HitObjectSpinner';
+import { Beatmap, TimingPoint } from '../Osu/Beatmap';
+import { EventBreak } from '../Osu/Beatmap/Sections/EventsSection';
+import { HitObjectType } from '../Osu/Beatmap/HitObjects/HitObject';
+import { HitObjectHold } from '../Osu/Beatmap/HitObjects/HitObjectHold';
+import { HitObjectSpinner } from '../Osu/Beatmap/HitObjects/HitObjectSpinner';
 
 export interface BPMAnalytics {
   min: number;
@@ -16,14 +16,12 @@ export interface BPMAnalytics {
  * @param bpm
  * @throws Error
  */
-export const changeBPM = (bm: OsuBeatmap, bpm: number) => {
+export const changeBPM = (bm: Beatmap, bpm: number) => {
   const currentBPM = analyzeBPM(bm).mean;
 
   const multiplier = bpm / currentBPM;
 
-  multiplyBPM(bm, multiplier, false);
-
-  bm.metadata.Version = `${bm.metadata.Version} ${bpm}BPM`;
+  multiplyBPM(bm, multiplier);
 };
 
 /**
@@ -32,13 +30,7 @@ export const changeBPM = (bm: OsuBeatmap, bpm: number) => {
  * @param bpm
  * @throws Error
  */
-export const multiplyBPM = (
-  bm: OsuBeatmap,
-  multiplier: number,
-  changeTitle = true
-) => {
-  console.log(`Multiplier: ${multiplier}`);
-
+export const multiplyBPM = (bm: Beatmap, multiplier: number) => {
   if (!multiplier) {
     throw new Error("multiplier can't be 0");
   }
@@ -77,9 +69,6 @@ export const multiplyBPM = (
       );
     }
   });
-
-  if (changeTitle)
-    bm.metadata.Version = `${bm.metadata.Version} ${multiplier.toFixed(2)}x`;
 };
 
 /**
@@ -87,7 +76,7 @@ export const multiplyBPM = (
  *
  * @param bm Beatmap
  */
-export const analyzeBPM = (bm: OsuBeatmap): BPMAnalytics => {
+export const analyzeBPM = (bm: Beatmap): BPMAnalytics => {
   if (!bm.timingPoints || !bm.timingPoints.length)
     return { min: 0, max: 0, mean: 0 };
 
@@ -141,7 +130,7 @@ export const analyzeBPM = (bm: OsuBeatmap): BPMAnalytics => {
   }
 
   if (min > max || mean < min || mean > max)
-    console.error(`Something happen: ${min}-${max} (${mean})`);
+    console.error(`Something happened: ${min}-${max} (${mean})`);
 
   return { min, max, mean };
 };

@@ -1,6 +1,6 @@
-import { analyzeBPM, BPMAnalytics, multiplyBPM } from './BPMChanger';
-import { OsuBeatmapReader } from './OsuBeatmap/OsuBeatmapReader';
-import { OsuBeatmapWriter } from './OsuBeatmap/OsuBeatmapWriter';
+import { analyzeBPM, BPMAnalytics, multiplyBPM } from '../ConvertManager/SpeedChanger';
+import { OsuBeatmapReader } from './BeatmapReader';
+import { OsuBeatmapWriter } from './BeatmapWriter';
 
 export function testConvert() {
   const inputPath =

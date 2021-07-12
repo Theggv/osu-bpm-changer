@@ -11,11 +11,16 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
-import { app, BrowserWindow, Menu, shell } from 'electron';
+import electron, { app, BrowserWindow, Menu, session, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
+import installer from 'electron-devtools-installer';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 // import MenuBuilder from './menu';
+
+(global as any).__static = app.isPackaged
+  ? path.join(process.resourcesPath, 'static')
+  : path.join(__dirname, '../static');
 
 export default class AppUpdater {
   constructor() {
@@ -42,12 +47,12 @@ if (
 const installExtensions = async () => {
   const installer = require('electron-devtools-installer');
   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-  const extensions = ['REACT_DEVELOPER_TOOLS'];
+  const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS'];
 
   return installer
     .default(
       extensions.map((name) => installer[name]),
-      forceDownload
+      { forceDownload, loadExtensionOptions: { allowFileAccess: true } }
     )
     .catch(console.log);
 };

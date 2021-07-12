@@ -17,7 +17,7 @@ import MetadataSection, {
  *
  * More info: https://osu.ppy.sh/wiki/en/osu%21_File_Formats/Osu_%28file_format%29
  */
-export interface OsuBeatmap {
+export interface Beatmap {
   formatVersion: number;
   general: GeneralSection;
   editor: EditorSection;
@@ -29,7 +29,7 @@ export interface OsuBeatmap {
   hitObjects: HitObject[];
 }
 
-export class OsuBeatmapDefault implements OsuBeatmap {
+export class OsuBeatmapDefault implements Beatmap {
   formatVersion: number = 0;
   general: GeneralSection = new GeneralSectionDefault();
   editor: EditorSection = new EditorSectionDefault();
