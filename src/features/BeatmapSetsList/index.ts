@@ -1,6 +1,10 @@
 import OsuFolder from './container';
 
-export { OsuFolderReducer, OsuFolderState } from './ducks';
+export {
+  BeatmapSetsListReducer,
+  BeatmapSetListSaga,
+  BeatmapSetsListState,
+} from './ducks';
 
 export * from './ducks/selectors';
 

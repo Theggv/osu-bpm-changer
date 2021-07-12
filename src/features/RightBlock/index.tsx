@@ -1,6 +1,9 @@
 import { Grid, makeStyles, Paper, Typography } from '@material-ui/core';
 import clsx from 'clsx';
+import path from 'path';
+
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   AutoSizer,
   CellMeasurer,
@@ -9,10 +12,12 @@ import {
   ListRowProps,
   ListRowRenderer,
 } from 'react-virtualized';
-import { BeatmapSetFolder, readMapset } from '../../shared/Osu/BeatmapSet';
-import { Beatmap } from '../../shared/Osu/Beatmap';
+
 import BeatmapView from './Beatmap';
-import { TaskManager } from '../../features/TaskManager';
+import { TaskManager } from '../TaskManager';
+import { selectSelectedItem } from '../../shared/selectors/BeatmapSetsList';
+import { Beatmap } from '../../shared/Osu';
+import { selectSongsFolder } from '../../shared/selectors/OsuFolder';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -67,14 +72,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface RightBlockProps {
-  selectedBeatmapSet?: BeatmapSetFolder;
-}
-
-const RightBlock: React.FC<RightBlockProps> = ({ selectedBeatmapSet }) => {
+const RightBlock: React.FC = () => {
   const classes = useStyles();
 
-  const [diffs, setDiffs] = React.useState<Beatmap[]>([]);
+  const osuSongsFolder = useSelector(selectSongsFolder);
+  const selectedBeatmapSet = useSelector(selectSelectedItem);
+  const diffs = selectedBeatmapSet?.difficulties || [];
+
   const [selectedDiff, setSelectedDiff] = React.useState<Beatmap | undefined>(
     undefined
   );
@@ -83,16 +87,6 @@ const RightBlock: React.FC<RightBlockProps> = ({ selectedBeatmapSet }) => {
     fixedWidth: true,
     minHeight: 25,
   });
-
-  React.useEffect(() => {
-    if (!selectedBeatmapSet) return;
-
-    const wrapper = async () => {
-      setDiffs(await readMapset(selectedBeatmapSet));
-    };
-
-    wrapper();
-  }, [selectedBeatmapSet]);
 
   const rowRenderer: ListRowRenderer = ({
     index, // Index of row
@@ -164,7 +158,10 @@ const RightBlock: React.FC<RightBlockProps> = ({ selectedBeatmapSet }) => {
         <Grid item sm className={clsx(classes.displayFlex, classes.paper)}>
           <BeatmapView
             beatmap={selectedDiff}
-            folderPath={selectedBeatmapSet?.fullPath}
+            folderPath={
+              selectedBeatmapSet &&
+              path.join(osuSongsFolder, selectedBeatmapSet.folderName)
+            }
           />
         </Grid>
       </Grid>

@@ -1,5 +1,10 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
+import { useSelector } from 'react-redux';
+import {
+  selectFilteredCount,
+  selectTotalCount,
+} from '../../BeatmapSetsSearchBar';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -13,13 +18,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface BottomBarProps {
-  filtered: number;
-  total: number;
-}
-
-const BottomBar: React.FC<BottomBarProps> = ({ filtered, total }) => {
+const BeatmapSetsFilterResults: React.FC = () => {
   const classes = useStyles();
+
+  const filtered = useSelector(selectFilteredCount);
+  const total = useSelector(selectTotalCount);
 
   return (
     <div className={classes.root}>
@@ -28,4 +31,4 @@ const BottomBar: React.FC<BottomBarProps> = ({ filtered, total }) => {
   );
 };
 
-export default BottomBar;
+export default BeatmapSetsFilterResults;

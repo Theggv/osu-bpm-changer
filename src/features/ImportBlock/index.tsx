@@ -1,18 +1,13 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 
-import SearchBar from './SearchBar';
-import SongsFolderList from './SongsFolderList';
-import { BeatmapSetFolder } from '../../shared/Osu/BeatmapSet';
 import clsx from 'clsx';
 import OsuFolder from '../../features/OsuFolder';
+import BeatmapSetsList from '../../features/BeatmapSetsList';
+import BeatmapSetsFilterResults from '../../shared/components/BeatmapSetsFilterResults';
+import BeatmapSetsSearchBar from '../../shared/BeatmapSetsSearchBar';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'column',
-    flex: 1,
-  },
   container: {
     display: 'flex',
     flexDirection: 'column',
@@ -28,26 +23,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface ImportBlockProps {
-  onFolderSelected: (folder: BeatmapSetFolder) => void;
-}
-
-const ImportBlock: React.FC<ImportBlockProps> = ({ onFolderSelected }) => {
+const ImportBlock: React.FC = () => {
   const classes = useStyles();
 
-  const [filter, setFilter] = React.useState('');
-
   return (
-    <div className={classes.root}>
+    <div className={clsx(classes.container, classes.flex)}>
       <div className={clsx(classes.container, classes.top)}>
         <OsuFolder />
-        <SearchBar onQueryChanged={(text) => setFilter(text)} />
+        <BeatmapSetsSearchBar />
       </div>
       <div className={clsx(classes.container, classes.flex, classes.bottom)}>
-        <SongsFolderList
-          filter={filter}
-          onFolderSelected={onFolderSelected}
-        />
+        <BeatmapSetsList />
+        <BeatmapSetsFilterResults />
       </div>
     </div>
   );

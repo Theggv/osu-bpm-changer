@@ -39,12 +39,6 @@ interface BeatmapProps {
   beatmap?: Beatmap;
 }
 
-const folderPathExample =
-  'D:\\osu!\\Songs\\216979 Spawn Of Possession - Apparition';
-const diffPathExample =
-  folderPathExample +
-  '\\Spawn Of Possession - Apparition (Mazzerin) [Blind Faith].osu';
-
 const BeatmapView: React.FC<BeatmapProps> = ({ beatmap, folderPath }) => {
   const classes = useStyles();
 

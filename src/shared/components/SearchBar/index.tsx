@@ -41,10 +41,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface SearchBarProps {
+  placeholder?: string;
   onQueryChanged: (searchString: string) => void;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ onQueryChanged }) => {
+const SearchBar: React.FC<SearchBarProps> = ({
+  onQueryChanged,
+  placeholder,
+}) => {
   const classes = useStyles();
 
   const onChange = (
@@ -58,7 +62,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onQueryChanged }) => {
       className={classes.root}
       id="input-with-icon-textfield"
       variant={'outlined'}
-      placeholder={'Beatmap'}
+      placeholder={placeholder}
       onChange={onChange}
       InputProps={{
         startAdornment: (

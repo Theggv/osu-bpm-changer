@@ -7,7 +7,7 @@ import {
   setFolder,
   setLoading,
   setValid,
-  selectFolder,
+  selectOsuFolder,
   selectIsLoading,
   selectIsValid,
 } from './ducks';
@@ -71,7 +71,7 @@ const useOpenFileDialog = () => {
 
   const isLoading = useSelector(selectIsLoading);
   const isValid = useSelector(selectIsValid);
-  const path = useSelector(selectFolder);
+  const path = useSelector(selectOsuFolder);
 
   React.useEffect(() => {
     tryFindPath();

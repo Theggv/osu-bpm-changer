@@ -4,20 +4,23 @@ import { Beatmap } from './Beatmap';
 import { OsuBeatmapReader } from './BeatmapReader';
 
 export interface BeatmapSetFolder {
-  beatmapId?: number;
-  artist?: string;
-  title?: string;
-  fullPath: string;
   folderName: string;
+  parsed: {
+    beatmapId?: number;
+    artist?: string;
+    title?: string;
+  };
 }
 
-export const readMapset = (
+export const readBeatmapSetFolder = (
+  songsFolder: string,
   beatmapSet: BeatmapSetFolder
 ): Promise<Beatmap[]> => {
+  const fullPath = path.join(songsFolder, beatmapSet.folderName);
+
   return new Promise((resolve, reject) => {
-    fs.readdir(beatmapSet.fullPath, { withFileTypes: true }, (err, files) => {
+    fs.readdir(fullPath, { withFileTypes: true }, (err, files) => {
       if (err) reject(err);
-      console.log(beatmapSet.fullPath);
 
       const reader = new OsuBeatmapReader();
 
@@ -30,7 +33,7 @@ export const readMapset = (
           )
           .map(
             async (beatmap) =>
-              await reader.parse(path.join(beatmapSet.fullPath, beatmap.name))
+              await reader.parse(path.join(fullPath, beatmap.name))
           )
       ).then((result) => {
         console.log(result);

@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import React from 'react';
 import { ExpandableContainer } from '../../shared/containers/AbsoluteExpandable';
 import { Task } from './components/Task';
-import { CSSTransition } from 'react-transition-group';
 
 import Fade from '@material-ui/core/Fade';
 

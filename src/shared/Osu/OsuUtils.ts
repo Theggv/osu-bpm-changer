@@ -30,7 +30,9 @@ export const readSongsFolder = async (
   osuPath: string
 ): Promise<BeatmapSetFolder[]> => {
   return new Promise(async (resolve, reject) => {
-    if (!(await isOsuFolder(osuPath))) {
+    const isValid = await isOsuFolder(osuPath);
+    
+    if (!isValid) {
       reject(new Error(`${osuPath} is not osu! folder.`));
     }
 
@@ -79,7 +81,9 @@ export const isOsuFolder = async (path: string): Promise<boolean> => {
 
 export const parseSongFolder = (
   song: string
-): { beatmapId?: number; artist?: string; title?: string } => {
+): {
+  parsed: BeatmapSetFolder['parsed'];
+} => {
   // {Beatmap number} {Artist} - {Song Title}.
   const regexp = /([0-9]+)\s(.+)\s-\s(.+)/;
 
@@ -87,13 +91,15 @@ export const parseSongFolder = (
     const matches = regexp.exec(song);
 
     return {
-      beatmapId: Number(matches![1]),
-      artist: matches![2],
-      title: matches![3].replaceAll('[no video]', '').trim(),
+      parsed: {
+        beatmapId: Number(matches![1]),
+        artist: matches![2],
+        title: matches![3].replaceAll('[no video]', '').trim(),
+      },
     };
   }
 
-  return {};
+  return { parsed: {} };
 };
 
 export const generateFileName = (beatmap: Beatmap): string => {

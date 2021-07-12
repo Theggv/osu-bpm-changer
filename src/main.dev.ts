@@ -11,9 +11,8 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
-import electron, { app, BrowserWindow, Menu, session, shell } from 'electron';
+import { app, BrowserWindow, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
-import installer from 'electron-devtools-installer';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 // import MenuBuilder from './menu';
@@ -114,6 +113,11 @@ const createWindow = async () => {
   mainWindow.webContents.on('new-window', (event, url) => {
     event.preventDefault();
     shell.openExternal(url);
+  });
+
+  mainWindow.webContents.on('devtools-reload-page', async () => {
+    console.warn('devtools on reload event');
+    await installExtensions();
   });
 
   // Remove this if your app does not use auto updates

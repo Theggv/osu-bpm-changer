@@ -1,15 +1,18 @@
 import { Grid, makeStyles, Paper, ThemeProvider } from '@material-ui/core';
+
 import clsx from 'clsx';
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import './App.global.css';
-import ImportBlock from '../components/ImportBlock';
-import theme from '../shared/themes/themeBlue';
+
 import { ipcRenderer } from 'electron';
-import RightBlock from '../components/RightBlock';
-import { BeatmapSetFolder } from '../shared/Osu/BeatmapSet';
+import theme from './themes/themeBlue';
 import { store } from './store';
+
+import ImportBlock from '../features/ImportBlock';
+import RightBlock from '../features/RightBlock';
+
+import './App.global.css';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,10 +55,6 @@ const useStyles = makeStyles((theme) => ({
 const Hello = () => {
   const classes = useStyles(theme);
 
-  const [selectedFolder, setSelectedFolder] = React.useState<
-    BeatmapSetFolder | undefined
-  >(undefined);
-
   React.useEffect(() => {
     window.addEventListener('message', (evt) => {
       if (evt.data.type === 'select-dirs') {
@@ -83,7 +82,7 @@ const Hello = () => {
             )}
             elevation={1}
           >
-            <ImportBlock onFolderSelected={setSelectedFolder} />
+            <ImportBlock />
           </Paper>
         </Grid>
         {/* Right Block */}
@@ -96,7 +95,7 @@ const Hello = () => {
             )}
             elevation={1}
           >
-            <RightBlock selectedBeatmapSet={selectedFolder} />
+            <RightBlock />
           </Paper>
         </Grid>
       </Grid>
