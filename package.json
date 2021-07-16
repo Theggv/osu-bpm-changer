@@ -86,7 +86,7 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "osu-bpm-changer",
+      "owner": "Theggv",
       "repo": "osu-bpm-changer",
       "private": true
     }
