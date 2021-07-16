@@ -1,4 +1,6 @@
+import clsx from 'clsx';
 import React from 'react';
+import { useDispatch } from 'react-redux';
 
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
@@ -6,7 +8,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 
 import { ConvertTask } from '../../../shared/ConvertManager/ConvertTask';
 import StyledLinearProgress from '../../components/StyledLinearProgress';
-import { TaskState } from '../ducks';
+import { setStatus, TaskState } from '../ducks';
 
 const useStyles = makeStyles((_theme) => ({
   root: {
@@ -53,6 +55,21 @@ const useStyles = makeStyles((_theme) => ({
   button: {
     color: '#fff',
   },
+  done: {
+    '& .MuiLinearProgress-barColorSecondary': {
+      backgroundColor: '#50f533',
+    },
+  },
+  error: {
+    '& .MuiLinearProgress-barColorSecondary': {
+      backgroundColor: '#fa4a37',
+    },
+  },
+  canceled: {
+    '& .MuiLinearProgress-barColorSecondary': {
+      backgroundColor: '#0004',
+    },
+  },
 }));
 
 interface TaskProps {
@@ -65,6 +82,23 @@ export const TaskDetailed: React.FC<TaskProps> = ({
   taskState,
 }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  const cancelTask = () => {
+    if (
+      taskState.status !== 'canceled' &&
+      taskState.status !== 'error' &&
+      taskState.status !== 'done' &&
+      taskState.status !== 'closed'
+    ) {
+      dispatch(
+        setStatus({
+          taskId: taskState.taskId,
+          status: 'canceled',
+        })
+      );
+    }
+  };
 
   return (
     <div className={classes.root}>
@@ -82,12 +116,27 @@ export const TaskDetailed: React.FC<TaskProps> = ({
       </div>
       <div className={classes.progressContainer}>
         <StyledLinearProgress
-          className={classes.progress}
+          className={clsx(
+            classes.progress,
+            taskState.status === 'canceled' && classes.canceled,
+            taskState.status === 'error' && classes.error,
+            taskState.status === 'done' && classes.done
+          )}
           variant={'determinate'}
-          value={taskState.progress}
+          value={
+            taskState.status === 'canceled' ||
+            taskState.status === 'error' ||
+            taskState.status === 'done'
+              ? 100
+              : taskState.progress
+          }
           color={'secondary'}
         />
-        <IconButton className={classes.button} size={'small'}>
+        <IconButton
+          className={classes.button}
+          size={'small'}
+          onClick={cancelTask}
+        >
           <ClearIcon />
         </IconButton>
       </div>

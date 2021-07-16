@@ -139,7 +139,7 @@ const OsuFolder: React.FC = () => {
         <CircularProgress
           size={20}
           className={classes.loader}
-          color={'secondary'}
+          color={'primary'}
         />
       ) : dialog.isValid ? (
         <CheckIcon className={clsx(classes.valid)} color={'secondary'} />

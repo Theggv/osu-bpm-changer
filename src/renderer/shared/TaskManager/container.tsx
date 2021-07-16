@@ -23,7 +23,6 @@ const useStyles = makeStyles((_theme) => ({
     borderTopLeftRadius: 8,
   },
   expanded: {
-    backgroundColor: '#111a',
     transition: 'backgroundColor 250ms',
   },
   tasksContainer: {

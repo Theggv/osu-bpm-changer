@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import path from 'path';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -42,6 +43,21 @@ const useStyles = makeStyles((theme) => ({
     '& div': {
       marginLeft: 10,
       marginRight: 10,
+    },
+  },
+  done: {
+    '& .MuiLinearProgress-barColorSecondary': {
+      backgroundColor: '#50f533',
+    },
+  },
+  error: {
+    '& .MuiLinearProgress-barColorSecondary': {
+      backgroundColor: '#fa4a37',
+    },
+  },
+  canceled: {
+    '& .MuiLinearProgress-barColorSecondary': {
+      backgroundColor: '#0004',
     },
   },
 }));
@@ -107,9 +123,22 @@ export const TaskMin: React.FC = () => {
     <div className={classes.root}>
       <div className={classes.top}>
         <StyledLinearProgress
-          className={classes.progress}
+          className={clsx(
+            classes.progress,
+            taskState?.status === 'canceled' && classes.canceled,
+            taskState?.status === 'error' && classes.error,
+            taskState?.status === 'done' && classes.done
+          )}
           variant={'determinate'}
-          value={taskState?.progress}
+          value={
+            taskState?.status === 'canceled' ||
+            taskState?.status === 'error' ||
+            taskState?.status === 'done'
+              ? 100
+              : taskState?.progress
+              ? taskState?.progress
+              : 0
+          }
           color={'secondary'}
         />
       </div>

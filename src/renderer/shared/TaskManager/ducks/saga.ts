@@ -67,7 +67,14 @@ function* progressWatcher(): any {
   }
 }
 
+function* statusChecker(action: SetStatusAction): any {
+  if (action.payload.status === 'canceled') {
+    ConvertManager.use().cancel(action.payload.taskId);
+  }
+}
+
 export function* saga() {
   yield takeEvery(ActionTypes.CREATE_TASK, createTask);
+  yield takeEvery(ActionTypes.SET_STATUS, statusChecker);
   yield takeEvery(progressChannel, progressWatcher);
 }

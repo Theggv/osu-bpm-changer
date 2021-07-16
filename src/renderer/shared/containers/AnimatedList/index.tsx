@@ -162,7 +162,7 @@ const AnimatedList = <T,>({
                 rowCount={items.length}
                 rowHeight={cache.defaultHeight}
                 rowRenderer={rowRenderer}
-                overscanRowCount={0}
+                overscanRowCount={3}
                 containerStyle={{ margin: 3 }}
                 onScroll={onScroll}
               />
