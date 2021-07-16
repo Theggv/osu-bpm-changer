@@ -10,8 +10,6 @@ import { ConvertTaskDetails } from './ConvertTask';
 import { analyzeBPM, changeBPM, multiplyBPM } from './SpeedChanger';
 import { Task } from './Task';
 
-declare const __static: string;
-
 export class BeatmapConverter {
   private beatmapFolder: ConvertTaskDetails['beatmapFolder'];
   private beatmap: ConvertTaskDetails['beatmap'];
@@ -223,7 +221,7 @@ export class BeatmapConverter {
   }
 
   private useLame(lameArgs: string[]): Task<void> {
-    const lamePath = path.join(__static, 'lame.exe');
+    const lamePath = path.join(__dirname, './static/lame.exe');
 
     return new Task((resolve, _, progress, onCancel) => {
       const process = spawn(lamePath, lameArgs, {
@@ -272,7 +270,7 @@ export class BeatmapConverter {
   }
 
   private useStretchSound(soundStretchArgs: string[]): Task<void> {
-    const stretchPath = path.join(__static, 'soundstretch.exe');
+    const stretchPath = path.join(__dirname, './static/soundstretch.exe');
 
     return new Task((resolve, reject, _, onCancel) => {
       const process = spawn(stretchPath, soundStretchArgs);

@@ -16,11 +16,7 @@ import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
 import path from 'path';
 
-import MenuBuilder from './menu';
-
-(global as any).__static = app.isPackaged
-  ? path.join(process.resourcesPath, 'static')
-  : path.join(__dirname, '../static');
+import MenuBuilder from './main/menu';
 
 export default class AppUpdater {
   constructor() {

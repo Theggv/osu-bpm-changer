@@ -1,8 +1,8 @@
+import { app } from 'electron';
 import path from 'path';
 import React from 'react';
 import { render } from 'react-dom';
-import App from './app/App';
 
-(window as any).__static = path.join(__dirname, '../../static');
+import App from './app/App';
 
 render(<App />, document.getElementById('root'));
