@@ -1,6 +1,7 @@
 import path from 'path';
 import { createSelector } from 'reselect';
-import { selectOsuFolder, selectIsValid } from '../../features/OsuFolder';
+
+import { selectIsValid, selectOsuFolder } from '../../features/OsuFolder';
 
 export const selectSongsFolder = createSelector(
   selectOsuFolder,

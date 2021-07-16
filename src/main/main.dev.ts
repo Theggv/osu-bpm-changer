@@ -10,12 +10,13 @@
  */
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
-import path from 'path';
+
 import { app, BrowserWindow, shell } from 'electron';
-import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import { autoUpdater } from 'electron-updater';
+import path from 'path';
+
 import MenuBuilder from './menu';
-// import MenuBuilder from './menu';
 
 (global as any).__static = app.isPackaged
   ? path.join(process.resourcesPath, 'static')

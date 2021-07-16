@@ -7,6 +7,7 @@ import { Beatmap } from '../../Osu';
 import { EventBackground } from '../../Osu/Beatmap/Sections/EventsSection';
 import { selectSongsFolder } from '../../selectors/OsuFolder';
 
+(window as any).__static = path.join(__dirname, '../../static');
 declare const __static: string;
 
 const defaultBackground = path.join(__static, 'default_bg.jpg');
@@ -42,7 +43,7 @@ export const useOsuBackground = (beatmap?: Beatmap, folderName?: string) => {
         bg.filename.replaceAll('"', '')
       );
     });
-    
+
     if (fs.existsSync(bgPath)) {
       setCurrent((prev) => {
         setPrevious(prev);
