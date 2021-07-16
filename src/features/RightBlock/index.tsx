@@ -1,9 +1,7 @@
-import { Grid, makeStyles, Paper, Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import path from 'path';
-
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   AutoSizer,
   CellMeasurer,
@@ -13,11 +11,17 @@ import {
   ListRowRenderer,
 } from 'react-virtualized';
 
-import BeatmapView from './Beatmap';
-import { TaskManager } from '../TaskManager';
-import { selectSelectedItem } from '../../shared/selectors/BeatmapSetsList';
-import { Beatmap } from '../../shared/Osu';
+import { Grid, makeStyles, Paper, Typography } from '@material-ui/core';
+
+import {
+  selectSelectedDiff,
+  selectSelectedSet,
+  setSelectedDiff,
+  setSelectedSet,
+} from '../../shared/BeatmapSetsList';
 import { selectSongsFolder } from '../../shared/selectors/OsuFolder';
+import TaskManager from '../../shared/TaskManager';
+import BeatmapView from './Beatmap';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -74,14 +78,20 @@ const useStyles = makeStyles((theme) => ({
 
 const RightBlock: React.FC = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const osuSongsFolder = useSelector(selectSongsFolder);
-  const selectedBeatmapSet = useSelector(selectSelectedItem);
+  const selectedBeatmapSet = useSelector(selectSelectedSet);
+  const selectedDiff = useSelector(selectSelectedDiff);
   const diffs = selectedBeatmapSet?.difficulties || [];
 
-  const [selectedDiff, setSelectedDiff] = React.useState<Beatmap | undefined>(
-    undefined
-  );
+  const selectedFolderPath =
+    selectedBeatmapSet &&
+    path.join(osuSongsFolder, selectedBeatmapSet.folderName);
+
+  React.useEffect(() => {
+    console.log(selectedFolderPath, selectedDiff);
+  }, [selectedFolderPath, selectedDiff]);
 
   const cache = new CellMeasurerCache({
     fixedWidth: true,
@@ -112,7 +122,14 @@ const RightBlock: React.FC = () => {
             <Paper
               className={clsx(classes.root, classes.margin)}
               elevation={2}
-              onClick={() => setSelectedDiff(item)}
+              onClick={() =>
+                dispatch(
+                  setSelectedDiff({
+                    beatmapSet: selectedBeatmapSet?.folderName,
+                    difficulty: item.metadata.Version,
+                  })
+                )
+              }
             >
               <Typography
                 variant={'body2'}
@@ -156,13 +173,14 @@ const RightBlock: React.FC = () => {
           </Paper>
         </Grid>
         <Grid item sm className={clsx(classes.displayFlex, classes.paper)}>
-          <BeatmapView
-            beatmap={selectedDiff}
-            folderPath={
-              selectedBeatmapSet &&
-              path.join(osuSongsFolder, selectedBeatmapSet.folderName)
-            }
-          />
+          {selectedFolderPath && selectedDiff.difficulty ? (
+            <BeatmapView
+              beatmap={selectedDiff.difficulty}
+              folderPath={selectedFolderPath}
+            />
+          ) : (
+            <div></div>
+          )}
         </Grid>
       </Grid>
       <TaskManager />

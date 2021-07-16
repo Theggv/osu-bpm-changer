@@ -1,12 +1,6 @@
 import fs from 'fs';
 
 import { Beatmap, OsuBeatmapDefault, TimingPoint } from './Beatmap';
-import { Colour } from './Beatmap/Sections/ColoursSection';
-import {
-  EventBackground,
-  EventBreak,
-  EventVideo,
-} from './Beatmap/Sections/EventsSection';
 import {
   HitObject,
   HitObjectImpl,
@@ -24,6 +18,12 @@ import {
   HitObjectSpinner,
   HitObjectSpinnerImpl,
 } from './Beatmap/HitObjects/HitObjectSpinner';
+import { Colour } from './Beatmap/Sections/ColoursSection';
+import {
+  EventBackground,
+  EventBreak,
+  EventVideo,
+} from './Beatmap/Sections/EventsSection';
 
 export class OsuBeatmapReader {
   public parse(path: string): Promise<Beatmap> {

@@ -1,11 +1,12 @@
-import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
 import React from 'react';
 
-import clsx from 'clsx';
+import { makeStyles } from '@material-ui/core/styles';
+
 import OsuFolder from '../../features/OsuFolder';
-import BeatmapSetsList from '../../features/BeatmapSetsList';
-import BeatmapSetsFilterResults from '../../shared/components/BeatmapSetsFilterResults';
+import BeatmapSetsList from '../../shared/BeatmapSetsList';
 import BeatmapSetsSearchBar from '../../shared/BeatmapSetsSearchBar';
+import BeatmapSetsFilterResults from '../../shared/components/BeatmapSetsFilterResults';
 
 const useStyles = makeStyles((theme) => ({
   container: {

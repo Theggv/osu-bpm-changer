@@ -1,12 +1,14 @@
 import { Beatmap } from '../Osu/Beatmap';
+import { TaskStatus } from '../TaskManager/ducks';
 import { ProgressHandler } from './Task';
 
 export interface ConvertTask {
   id: number;
-  status: 'waiting' | 'running' | 'calceled' | 'done';
+  status: TaskStatus;
 
   details: ConvertTaskDetails;
   onProgress?: ProgressHandler;
+  onStatusChanged?: (status: TaskStatus) => void;
 }
 
 export interface ConvertTaskDetails {
@@ -15,4 +17,11 @@ export interface ConvertTaskDetails {
 
   convertType: 'multiplier' | 'bpm';
   convertValue: number;
+
+  options?: {
+    circleSize: number;
+    approachRate: number;
+    overallDiff: number;
+    hpDrain: number;
+  };
 }

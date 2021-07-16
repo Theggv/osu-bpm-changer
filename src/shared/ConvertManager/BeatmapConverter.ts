@@ -1,29 +1,38 @@
 import { spawn } from 'child_process';
 import fs from 'fs';
-import path from 'path';
-import { Beatmap } from '../Osu/Beatmap';
-import { analyzeBPM, changeBPM, multiplyBPM } from './SpeedChanger';
 import { cloneDeep } from 'lodash';
-import { ConvertTaskDetails } from './ConvertTask';
-import { Task } from './Task';
+import path from 'path';
+
+import { Beatmap } from '../Osu/Beatmap';
 import { OsuBeatmapWriter } from '../Osu/BeatmapWriter';
 import { generateFileName } from '../Osu/OsuUtils';
+import { ConvertTaskDetails } from './ConvertTask';
+import { analyzeBPM, changeBPM, multiplyBPM } from './SpeedChanger';
+import { Task } from './Task';
 
 declare const __static: string;
 
 export class BeatmapConverter {
   private beatmapFolder: ConvertTaskDetails['beatmapFolder'];
   private beatmap: ConvertTaskDetails['beatmap'];
+  private options?: ConvertTaskDetails['options'];
 
   private tempFilesForCleanup: string[];
   private tempFilesFull: string[];
 
   private constructor(
     beatmapFolder: ConvertTaskDetails['beatmapFolder'],
-    beatmap: ConvertTaskDetails['beatmap']
+    beatmap: ConvertTaskDetails['beatmap'],
+    options?: {
+      circleSize: number;
+      approachRate: number;
+      overallDiff: number;
+      hpDrain: number;
+    }
   ) {
     this.beatmapFolder = beatmapFolder;
     this.beatmap = beatmap;
+    this.options = options;
 
     this.tempFilesForCleanup = [];
     this.tempFilesFull = [];
@@ -31,9 +40,15 @@ export class BeatmapConverter {
 
   public static use(
     beatmapFolder: ConvertTaskDetails['beatmapFolder'],
-    beatmap: ConvertTaskDetails['beatmap']
+    beatmap: ConvertTaskDetails['beatmap'],
+    options?: {
+      circleSize: number;
+      approachRate: number;
+      overallDiff: number;
+      hpDrain: number;
+    }
   ): BeatmapConverter {
-    return new BeatmapConverter(beatmapFolder, beatmap);
+    return new BeatmapConverter(beatmapFolder, beatmap, options);
   }
 
   public change(
@@ -63,11 +78,13 @@ export class BeatmapConverter {
 
         await this.changeMetadata(type, value, converted);
 
-        this.cleanup();
+        await this.cleanup();
 
         resolve(converted);
       } catch (error) {
-        this.cleanup(true);
+        try {
+          await this.cleanup(true);
+        } catch {}
 
         reject(error);
       }
@@ -108,6 +125,14 @@ export class BeatmapConverter {
     else
       beatmap.metadata.Version =
         beatmap.metadata.Version + ` ${value.toFixed(0)}BPM`;
+
+    // Apply options
+    if (this.options) {
+      beatmap.difficulty.ApproachRate = this.options.approachRate;
+      beatmap.difficulty.OverallDifficulty = this.options.overallDiff;
+      beatmap.difficulty.HPDrainRate = this.options.hpDrain;
+      beatmap.difficulty.CircleSize = this.options.circleSize;
+    }
 
     const writer = new OsuBeatmapWriter();
     const beatmapPath = path.join(
@@ -219,7 +244,12 @@ export class BeatmapConverter {
 
       process.stderr?.on('data', (data) => {
         const str: string = data.toString();
+
         if (str) {
+          if (str.includes('Error')) {
+            console.error(str);
+          }
+
           const args = str
             .split(' ')
             .map((i) => i.trim())
@@ -231,7 +261,7 @@ export class BeatmapConverter {
             else if (args[0])
               [currentFrames, totalFrames] = args[0].split('/').map(Number);
 
-            if (oldProgress < currentFrames / totalFrames - 0.05) {
+            if (oldProgress < currentFrames / totalFrames - 0.1) {
               oldProgress = currentFrames / totalFrames;
               progress && progress(oldProgress * 100);
             }
@@ -263,21 +293,25 @@ export class BeatmapConverter {
     });
   }
 
-  private cleanup(isFull: boolean = false) {
-    if (isFull) {
-      this.tempFilesFull.forEach((file) => {
-        fs.unlink(file, (err) => {
-          if (err) console.error(err);
+  private cleanup(isFull: boolean = false): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (isFull) {
+        this.tempFilesFull.forEach((file) => {
+          fs.unlink(file, (err) => {
+            if (err) reject(err);
+            resolve();
+          });
         });
-      });
-      this.tempFilesFull = [];
-    } else {
-      this.tempFilesForCleanup.forEach((file) => {
-        fs.unlink(file, (err) => {
-          if (err) console.error(err);
+        this.tempFilesFull = [];
+      } else {
+        this.tempFilesForCleanup.forEach((file) => {
+          fs.unlink(file, (err) => {
+            if (err) reject(err);
+            resolve();
+          });
         });
-      });
-      this.tempFilesForCleanup = [];
-    }
+        this.tempFilesForCleanup = [];
+      }
+    });
   }
 }

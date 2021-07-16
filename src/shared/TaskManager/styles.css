@@ -1,0 +1,35 @@
+.task-detailed-enter {
+  opacity: 0;
+}
+
+.task-detailed-enter-active {
+  opacity: 1;
+  transition: opacity 350ms ease;
+}
+
+.task-detailed-exit {
+  opacity: 1;
+}
+
+.task-detailed-exit-active {
+  opacity: 0;
+  transition: opacity 250ms ease;
+}
+
+.task-min-enter {
+  opacity: 0;
+}
+
+.task-min-enter-active {
+  opacity: 1;
+  transition: opacity 250ms ease;
+}
+
+.task-min-exit {
+  opacity: 1;
+}
+
+.task-min-exit-active {
+  opacity: 0;
+  transition: opacity 150ms ease;
+}

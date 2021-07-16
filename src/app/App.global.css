@@ -3,6 +3,9 @@
  *        See https://github.com/webpack-contrib/sass-loader#imports
  */
 
+@import '../shared/TaskManager/styles.css';
+@import '../features/RightBlock/styles.css';
+
 html {
   height: 100%;
   margin: 0;

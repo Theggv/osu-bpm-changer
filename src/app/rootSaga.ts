@@ -1,7 +1,8 @@
 import { all } from 'redux-saga/effects';
 
-import { BeatmapSetListSaga } from '../features/BeatmapSetsList';
+import { BeatmapSetListSaga } from '../shared/BeatmapSetsList';
+import { TaskManagerSaga } from '../shared/TaskManager';
 
 export function* rootSaga() {
-  yield all([BeatmapSetListSaga()]);
+  yield all([BeatmapSetListSaga(), TaskManagerSaga()]);
 }

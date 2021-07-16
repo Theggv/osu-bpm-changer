@@ -1,6 +1,8 @@
-import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { useSelector } from 'react-redux';
+
+import { makeStyles } from '@material-ui/core/styles';
+
 import {
   selectFilteredCount,
   selectTotalCount,
@@ -9,12 +11,11 @@ import {
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     color: theme.palette.text.secondary,
     backgroundColor: theme.palette.primary.dark,
     alignItems: 'center',
-    paddingRight: 15,
-    minHeight: 50,
+    width: 150,
   },
 }));
 

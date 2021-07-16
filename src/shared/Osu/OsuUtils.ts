@@ -1,8 +1,9 @@
-import path from 'path';
 import find from 'find-process';
 import fs from 'fs';
-import { BeatmapSetFolder } from './BeatmapSet';
+import path from 'path';
+
 import { Beatmap } from './Beatmap';
+import { BeatmapSetFolder } from './BeatmapSet';
 
 export const tryFindOsuFolder = async (): Promise<string | null> => {
   try {
@@ -31,7 +32,7 @@ export const readSongsFolder = async (
 ): Promise<BeatmapSetFolder[]> => {
   return new Promise(async (resolve, reject) => {
     const isValid = await isOsuFolder(osuPath);
-    
+
     if (!isValid) {
       reject(new Error(`${osuPath} is not osu! folder.`));
     }
@@ -104,7 +105,13 @@ export const parseSongFolder = (
 
 export const generateFileName = (beatmap: Beatmap): string => {
   return (
-    `${beatmap.metadata.Artist} - ${beatmap.metadata.Title} ` +
-    `(${beatmap.metadata.Creator}) [${beatmap.metadata.Version}].osu`
+    `${escape(beatmap.metadata.Artist)} - ${escape(beatmap.metadata.Title)} ` +
+    `(${escape(beatmap.metadata.Creator)}) [${escape(
+      beatmap.metadata.Version
+    )}].osu`
   );
+};
+
+const escape = (str: string): string => {
+  return str.replaceAll('*', '');
 };

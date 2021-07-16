@@ -1,18 +1,18 @@
-import { Grid, makeStyles, Paper, ThemeProvider } from '@material-ui/core';
+import './App.global.css';
 
 import clsx from 'clsx';
-import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { Provider } from 'react-redux';
-
 import { ipcRenderer } from 'electron';
-import theme from './themes/themeBlue';
-import { store } from './store';
+import React from 'react';
+import { Provider } from 'react-redux';
+import { BrowserRouter as Router } from 'react-router-dom';
+
+import { Grid, makeStyles, Paper, ThemeProvider } from '@material-ui/core';
 
 import ImportBlock from '../features/ImportBlock';
 import RightBlock from '../features/RightBlock';
-
-import './App.global.css';
+import { store } from './store';
+import theme from './themes/themeBlue';
+import MainPage from '../pages/MainPage';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -108,7 +108,8 @@ const App = () => {
     <Router>
       <Provider store={store}>
         <ThemeProvider theme={theme}>
-          <Hello />
+          {/* <Hello /> */}
+          <MainPage />
         </ThemeProvider>
       </Provider>
     </Router>

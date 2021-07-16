@@ -26,6 +26,7 @@ import CreateNewFolderIcon from '@material-ui/icons/CreateNewFolder';
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    flex: 1,
     margin: 10,
     display: 'flex',
     flexDirection: 'row',

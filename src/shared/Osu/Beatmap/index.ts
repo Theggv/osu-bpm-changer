@@ -1,3 +1,4 @@
+import { HitObject } from './HitObjects/HitObject';
 import ColoursSection from './Sections/ColoursSection';
 import DifficultySection, {
   DifficultySectionDefault,
@@ -7,7 +8,6 @@ import { BeatmapEvent } from './Sections/EventsSection';
 import GeneralSection, {
   GeneralSectionDefault,
 } from './Sections/GeneralSection';
-import { HitObject } from './HitObjects/HitObject';
 import MetadataSection, {
   MetadataSectionDefault,
 } from './Sections/MetadataSection';

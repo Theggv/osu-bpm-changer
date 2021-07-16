@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
+
 import SearchBar from '../components/SearchBar';
 import { setFilter } from './ducks';
 

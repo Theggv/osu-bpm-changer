@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+
 import { Beatmap } from './Beatmap';
 import { OsuBeatmapReader } from './BeatmapReader';
 
@@ -36,7 +37,6 @@ export const readBeatmapSetFolder = (
               await reader.parse(path.join(fullPath, beatmap.name))
           )
       ).then((result) => {
-        console.log(result);
         resolve(result);
       });
     });

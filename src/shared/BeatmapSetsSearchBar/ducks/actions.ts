@@ -1,4 +1,5 @@
 import { Action } from 'redux';
+
 import { FilterState } from './types';
 
 // Action Types enum

@@ -1,0 +1,17 @@
+.img-anim-enter {
+  opacity: 0.5;
+}
+
+.img-anim-enter-active {
+  opacity: 1;
+  transition: opacity 2500ms ease;
+}
+
+.img-anim-exit {
+  opacity: 1;
+}
+
+.img-anim-exit-active {
+  opacity: 0;
+  transition: opacity 2500ms ease;
+}
