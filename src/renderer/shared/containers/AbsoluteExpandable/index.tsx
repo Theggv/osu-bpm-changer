@@ -47,7 +47,6 @@ const useCollapse = (expandBy: number, animationTimeMS: number) => {
   };
 
   useEffect(() => {
-    console.log(onCollapse);
     if (!onCollapse.onStart && !onCollapse.onEnd) return;
 
     setTimeout(() => {

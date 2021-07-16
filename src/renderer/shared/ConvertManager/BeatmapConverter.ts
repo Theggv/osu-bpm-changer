@@ -221,7 +221,7 @@ export class BeatmapConverter {
   }
 
   private useLame(lameArgs: string[]): Task<void> {
-    const lamePath = path.join(__dirname, './static/lame.exe');
+    const lamePath = path.join(__dirname, '../assets/lame.exe');
 
     return new Task((resolve, _, progress, onCancel) => {
       const process = spawn(lamePath, lameArgs, {
@@ -270,7 +270,7 @@ export class BeatmapConverter {
   }
 
   private useStretchSound(soundStretchArgs: string[]): Task<void> {
-    const stretchPath = path.join(__dirname, './static/soundstretch.exe');
+    const stretchPath = path.join(__dirname, '../assets/soundstretch.exe');
 
     return new Task((resolve, reject, _, onCancel) => {
       const process = spawn(stretchPath, soundStretchArgs);

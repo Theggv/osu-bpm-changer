@@ -7,7 +7,7 @@ import { Beatmap } from '../../Osu';
 import { EventBackground } from '../../Osu/Beatmap/Sections/EventsSection';
 import { selectSongsFolder } from '../../selectors/OsuFolder';
 
-const defaultBackground = path.join(__dirname, './static/default_bg.jpg');
+const defaultBackground = path.join(__dirname, '../assets/default_bg.jpg');
 
 /**
  * Hook to load background image for `beatmap`

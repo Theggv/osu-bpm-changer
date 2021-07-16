@@ -52,10 +52,6 @@ export const TaskManager = () => {
 
   const classes = useStyles();
 
-  React.useEffect(() => {
-    console.log(collapseState);
-  }, [collapseState]);
-
   return (
     <ExpandableContainer
       className={classes.root}
