@@ -39,11 +39,11 @@ const useStyles = makeStyles((theme) => ({
       },
       '&::-webkit-scrollbar-track': {
         borderRadius: 20,
-        backgroundColor: theme.palette.primary.light,
+        backgroundColor: '#0004',
       },
       '&::-webkit-scrollbar-thumb': {
         borderRadius: 20,
-        backgroundColor: theme.palette.primary.dark,
+        backgroundColor: '#fff',
       },
     },
   },

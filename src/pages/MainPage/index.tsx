@@ -9,14 +9,11 @@ import OsuFolder from '../../features/OsuFolder';
 import BeatmapSetsSearchBar from '../../shared/BeatmapSetsSearchBar';
 import BeatmapSetsFilterResults from '../../shared/components/BeatmapSetsFilterResults';
 import TaskManager from '../../shared/TaskManager';
+import BackgroundContainer from '../../shared/containers/BackgroundContainer';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((_theme) => ({
   root: {
-    padding: '16px 0 0 16px',
-
-    flexDirection: 'column',
     overflow: 'hidden',
-    backgroundColor: theme.palette.primary.light,
   },
   fullSize: {
     flex: 1,
@@ -29,19 +26,20 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: 60,
   },
   footer: {
-    maxHeight: 50,
+    minHeight: 50,
+    marginLeft: 32,
   },
   aside: {
-    minWidth: '375px',
+    minWidth: '400px',
   },
   bglight: {
-    backgroundColor: theme.palette.primary.light,
+    backgroundColor: 'transparent',
   },
   bgMain: {
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: 'transparent',
   },
   bgDark: {
-    backgroundColor: theme.palette.primary.dark,
+    backgroundColor: '#0004',
   },
   osuFolderBlock: {
     alignItems: 'center',
@@ -50,8 +48,8 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'flex-end',
   },
-  divider: {
-    borderBottom: `${theme.palette.secondary.dark}40 1px solid`,
+  column: {
+    flexDirection: 'column',
   },
 }));
 
@@ -59,69 +57,64 @@ const MainPage = () => {
   const classes = useStyles();
 
   return (
-    <div className={clsx(classes.root, classes.flex, classes.fullSize)}>
-      {/* Header */}
-      <header
+    <BackgroundContainer>
+      <div
         className={clsx(
-          classes.header,
+          classes.root,
           classes.flex,
           classes.fullSize,
-          classes.bgDark
+          classes.column
         )}
       >
-        <aside
+        {/* Header */}
+        <header
           className={clsx(
-            classes.aside,
-            classes.flex,
-            classes.osuFolderBlock,
-            classes.divider
-          )}
-        >
-          <OsuFolder />
-        </aside>
-        <section
-          className={clsx(
+            classes.header,
             classes.flex,
             classes.fullSize,
-            classes.searchBlock,
-            classes.divider
+            classes.bgDark
           )}
         >
-          <BeatmapSetsSearchBar />
-          <BeatmapSetsFilterResults />
-        </section>
-      </header>
-      {/* Main */}
-      <main className={clsx(classes.flex, classes.fullSize, classes.bgMain)}>
-        <aside className={clsx(classes.aside, classes.flex, classes.bglight)}>
-          <ConvertBlock />
-        </aside>
-        <section className={clsx(classes.flex, classes.fullSize)}>
-          <DifficultiesList />
-        </section>
-      </main>
-      {/* Footer */}
-      <footer
-        className={clsx(
-          classes.footer,
-          classes.flex,
-          classes.fullSize,
-          classes.bgDark
-        )}
-      >
-        <aside
-          className={clsx(
-            classes.aside,
-            classes.flex,
-            classes.osuFolderBlock,
-            classes.divider
-          )}
-        ></aside>
-        <section className={clsx(classes.flex, classes.fullSize)}>
-          <TaskManager />
-        </section>
-      </footer>
-    </div>
+          <aside
+            className={clsx(
+              classes.aside,
+              classes.flex,
+              classes.osuFolderBlock
+            )}
+          >
+            <OsuFolder />
+          </aside>
+          <section
+            className={clsx(
+              classes.flex,
+              classes.fullSize,
+              classes.searchBlock
+            )}
+          >
+            <BeatmapSetsSearchBar />
+            <BeatmapSetsFilterResults />
+          </section>
+        </header>
+        <div className={clsx(classes.flex, classes.fullSize, classes.bgMain)}>
+          {/* Aside */}
+          <aside className={clsx(classes.aside, classes.flex, classes.bglight)}>
+            <ConvertBlock />
+          </aside>
+          {/* Main */}
+          <main
+            className={clsx(classes.flex, classes.fullSize, classes.column)}
+          >
+            <section className={clsx(classes.flex, classes.fullSize)}>
+              <DifficultiesList />
+            </section>
+            {/* Footer */}
+            <footer className={clsx(classes.footer, classes.flex)}>
+              <TaskManager />
+            </footer>
+          </main>
+        </div>
+      </div>
+    </BackgroundContainer>
   );
 };
 

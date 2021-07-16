@@ -2,10 +2,10 @@ import path from 'path';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import LinearProgress from '@material-ui/core/LinearProgress';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { selectSelectedDiff } from '../../BeatmapSetsList';
+import StyledLinearProgress from '../../components/StyledLinearProgress';
 import { ConvertManager } from '../../ConvertManager';
 import { ConvertTask } from '../../ConvertManager/ConvertTask';
 import { selectSongsFolder } from '../../selectors/OsuFolder';
@@ -106,7 +106,7 @@ export const TaskMin: React.FC = () => {
   return (
     <div className={classes.root}>
       <div className={classes.top}>
-        <LinearProgress
+        <StyledLinearProgress
           className={classes.progress}
           variant={'determinate'}
           value={taskState?.progress}

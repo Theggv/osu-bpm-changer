@@ -1,15 +1,17 @@
-import { makeStyles } from '@material-ui/core/styles';
+import '../styles.css';
+
 import clsx from 'clsx';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { CSSTransition } from 'react-transition-group';
+import { CellMeasurerCache } from 'react-virtualized';
+
+import { makeStyles } from '@material-ui/core/styles';
+
+import CacheableListWithColumns from '../../containers/CacheableListWithColumns';
 import { ConvertManager } from '../../ConvertManager';
 import { selectTasks } from '../ducks';
 import { TaskDetailed } from './TaskDetailed';
-
-import '../styles.css';
-import { CellMeasurerCache } from 'react-virtualized';
-import CacheableListWithColumns from '../../containers/CacheableListWithColumns';
 
 const useStyles = makeStyles((_theme) => ({
   root: {

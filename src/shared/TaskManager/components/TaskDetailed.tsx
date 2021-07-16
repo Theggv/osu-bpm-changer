@@ -1,12 +1,11 @@
-import Card from '@material-ui/core/Card';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import { makeStyles } from '@material-ui/core/styles';
-import ClearIcon from '@material-ui/icons/Clear';
-import IconButton from '@material-ui/core/IconButton';
-
 import React from 'react';
 
+import IconButton from '@material-ui/core/IconButton';
+import { makeStyles } from '@material-ui/core/styles';
+import ClearIcon from '@material-ui/icons/Clear';
+
 import { ConvertTask } from '../../../shared/ConvertManager/ConvertTask';
+import StyledLinearProgress from '../../components/StyledLinearProgress';
 import { TaskState } from '../ducks';
 
 const useStyles = makeStyles((_theme) => ({
@@ -16,6 +15,10 @@ const useStyles = makeStyles((_theme) => ({
     flexDirection: 'column',
     margin: 5,
     padding: 10,
+    borderRadius: 8,
+    border: '#fff 1px solid',
+    color: '#fff',
+    backgroundColor: '#0004',
   },
   progressContainer: {
     flex: 1,
@@ -27,8 +30,10 @@ const useStyles = makeStyles((_theme) => ({
     fontSize: 14,
     textOverflow: 'ellipsis',
     overflow: 'hidden',
-    whiteSpace: 'nowrap',
-    height: 30,
+    lineClamp: 1,
+    display: 'box',
+    wordWrap: 'break-word',
+    boxOrient: 'vertical',
   },
   status: {
     marginTop: 3,
@@ -45,6 +50,9 @@ const useStyles = makeStyles((_theme) => ({
   progress: {
     flex: 1,
   },
+  button: {
+    color: '#fff',
+  },
 }));
 
 interface TaskProps {
@@ -59,7 +67,7 @@ export const TaskDetailed: React.FC<TaskProps> = ({
   const classes = useStyles();
 
   return (
-    <Card className={classes.root}>
+    <div className={classes.root}>
       <div className={classes.title}>
         {taskDetails.beatmap.metadata.Artist} -{' '}
         {taskDetails.beatmap.metadata.Title} [
@@ -73,16 +81,16 @@ export const TaskDetailed: React.FC<TaskProps> = ({
         <div>{taskState.status}</div>
       </div>
       <div className={classes.progressContainer}>
-        <LinearProgress
+        <StyledLinearProgress
           className={classes.progress}
           variant={'determinate'}
           value={taskState.progress}
           color={'secondary'}
         />
-        <IconButton color={'secondary'} size={'small'}>
+        <IconButton className={classes.button} size={'small'}>
           <ClearIcon />
         </IconButton>
       </div>
-    </Card>
+    </div>
   );
 };

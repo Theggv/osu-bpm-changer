@@ -17,10 +17,14 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    backgroundColor: theme.palette.primary.dark,
+    backgroundColor: '#0004',
   },
   border: {
     borderTopLeftRadius: 8,
+  },
+  expanded: {
+    backgroundColor: '#111a',
+    transition: 'backgroundColor 250ms',
   },
   tasksContainer: {
     flex: 1,
@@ -42,20 +46,33 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const TaskManager = () => {
-  const [isCollapsed, setCollapsed] = React.useState(false);
+  const [collapseState, setCollapseState] = React.useState<
+    'default' | 'expanded' | 'onstart' | 'onend'
+  >('default');
 
   const classes = useStyles();
+
+  React.useEffect(() => {
+    console.log(collapseState);
+  }, [collapseState]);
 
   return (
     <ExpandableContainer
       className={classes.root}
       expandBy={200}
-      onCollapseChange={setCollapsed}
+      onCollapseChange={setCollapseState}
     >
-      <div className={clsx(classes.container, isCollapsed && classes.border)}>
-        <DetailedContainer isCollapsed={isCollapsed} />
+      <div
+        className={clsx(
+          classes.container,
+          classes.border,
+          collapseState === 'onstart' ||
+            (collapseState === 'expanded' && classes.expanded)
+        )}
+      >
+        <DetailedContainer isCollapsed={collapseState === 'expanded'} />
         <CSSTransition
-          in={!isCollapsed}
+          in={collapseState === 'default'}
           timeout={250}
           mountOnEnter
           unmountOnExit

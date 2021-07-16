@@ -9,6 +9,8 @@ import { selectSongsFolder } from '../../selectors/OsuFolder';
 
 declare const __static: string;
 
+const defaultBackground = path.join(__static, 'default_bg.jpg');
+
 /**
  * Hook to load background image for `beatmap`
  * NOTE: folderName is not a path, just name of folder with beatmap
@@ -17,36 +19,41 @@ declare const __static: string;
  * @returns
  */
 export const useOsuBackground = (beatmap?: Beatmap, folderName?: string) => {
-  const [current, setCurrent] = React.useState(
-    path.join(__static, 'default_bg.jpg')
-  );
-  const [previous, setPrevious] = React.useState(
-    path.join(__static, 'default_bg.jpg')
-  );
+  const [current, setCurrent] = React.useState(defaultBackground);
+  const [previous, setPrevious] = React.useState(defaultBackground);
 
   const songsFolder = useSelector(selectSongsFolder);
 
   React.useEffect(() => {
     if (!beatmap || !folderName) return;
 
+    let bgPath = '';
+
     beatmap.events.forEach((event) => {
-      if (!(event instanceof EventBackground)) return;
+      if (!(event instanceof EventBackground)) {
+        return;
+      }
 
       const bg = event as EventBackground;
 
-      const bgPath = path.join(
+      bgPath = path.join(
         songsFolder,
         folderName,
         bg.filename.replaceAll('"', '')
       );
-
-      if (fs.existsSync(bgPath)) {
-        setCurrent((prev) => {
-          setPrevious(prev);
-          return bgPath;
-        });
-      }
     });
+    
+    if (fs.existsSync(bgPath)) {
+      setCurrent((prev) => {
+        setPrevious(prev);
+        return bgPath;
+      });
+    } else {
+      setCurrent((prev) => {
+        setPrevious(prev);
+        return defaultBackground;
+      });
+    }
   }, [beatmap, folderName]);
 
   return {

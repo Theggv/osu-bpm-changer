@@ -14,7 +14,7 @@ const useStyles = makeStyles({
   },
   title: {
     fontWeight: 600,
-    width: 70,
+    width: 90,
     marginRight: 10,
   },
   slider: {
@@ -22,7 +22,7 @@ const useStyles = makeStyles({
   },
   input: {
     marginLeft: 10,
-    width: 52,
+    width: 62,
   },
 });
 
@@ -42,29 +42,43 @@ const StyledSlider = withStyles((theme) => ({
   },
   track: {
     height: 2,
+    backgroundColor: '#fff',
   },
   rail: {
     height: 2,
     opacity: 0.5,
-    backgroundColor: `${theme.palette.secondary.main}`,
+    backgroundColor: '#000',
   },
   mark: {
-    backgroundColor: `${theme.palette.secondary.main}`,
+    backgroundColor: '#000',
     height: 6,
     width: 1,
     marginTop: -2,
   },
   markActive: {
-    backgroundColor: `currentColor`,
+    backgroundColor: '#fff',
   },
   markLabel: {
-    color: `${theme.palette.secondary.main}c0`,
+    color: '#fff8',
+  },
+  thumb: {
+    color: '#fff',
   },
 }))(Slider);
 
 const StyledInput = withStyles((_theme) => ({
   input: {
     textAlign: 'center',
+    color: '#fff',
+    textDecoration: 'none',
+  },
+  root: {
+    '&::before': {
+      display: 'none',
+    },
+    '&::after': {
+      display: 'none',
+    },
   },
 }))(Input);
 

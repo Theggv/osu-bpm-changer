@@ -23,7 +23,6 @@ const useStyles = makeStyles({
 
 const StyledSlider = withStyles((theme) => ({
   root: {
-    color: '#3880ff',
     height: 2,
     padding: '15px 0',
   },
@@ -37,23 +36,27 @@ const StyledSlider = withStyles((theme) => ({
   },
   track: {
     height: 2,
+    backgroundColor: '#fff',
   },
   rail: {
     height: 2,
     opacity: 0.5,
-    backgroundColor: `${theme.palette.secondary.main}`,
+    backgroundColor: '#000',
   },
   mark: {
-    backgroundColor: `${theme.palette.secondary.main}`,
+    backgroundColor: '#000',
     height: 6,
     width: 1,
     marginTop: -2,
   },
   markActive: {
-    backgroundColor: `currentColor`,
+    backgroundColor: '#fff',
   },
   markLabel: {
-    color: `${theme.palette.secondary.main}c0`,
+    color: '#fff8',
+  },
+  thumb: {
+    color: '#fff',
   },
 }))(Slider);
 

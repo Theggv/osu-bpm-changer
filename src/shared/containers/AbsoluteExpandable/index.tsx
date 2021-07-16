@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -22,24 +22,51 @@ const useStyles = makeStyles({
 });
 
 const useCollapse = (expandBy: number, animationTimeMS: number) => {
-  const [isCollapse, setCollapse] = React.useState(false);
+  const [onCollapse, setOnCollapse] = React.useState<{
+    onStart: boolean;
+    onEnd: boolean;
+    onExpand: boolean;
+  }>({ onStart: false, onEnd: false, onExpand: false });
 
   const classes = useStyles();
 
   const onMouseEnter = (_e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    setCollapse(true);
+    setOnCollapse((_prev) => ({
+      onExpand: false,
+      onStart: true,
+      onEnd: false,
+    }));
   };
 
   const onMouseLeave = (_e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    setCollapse(false);
+    setOnCollapse((_prev) => ({
+      onExpand: false,
+      onStart: false,
+      onEnd: true,
+    }));
   };
 
+  useEffect(() => {
+    console.log(onCollapse);
+    if (!onCollapse.onStart && !onCollapse.onEnd) return;
+
+    setTimeout(() => {
+      setOnCollapse((prev) => ({
+        onStart: false,
+        onEnd: false,
+        onExpand: prev.onStart,
+      }));
+    }, 250);
+  }, [onCollapse]);
+
   return {
-    isCollapse,
+    onCollapseStart: onCollapse.onStart,
+    onCollapseEnd: onCollapse.onEnd,
+    isCollapse: onCollapse.onExpand,
     bind: {
       className: classes.transition,
       style: {
-        top: isCollapse ? -expandBy : 0,
+        top: onCollapse.onExpand || onCollapse.onStart ? -expandBy : 0,
         transition: `all ${animationTimeMS}ms ease`,
       } as React.CSSProperties,
       onMouseEnter,
@@ -51,7 +78,9 @@ const useCollapse = (expandBy: number, animationTimeMS: number) => {
 type Props = {
   className?: string;
   expandBy: number;
-  onCollapseChange?: (isCollapse: boolean) => void;
+  onCollapseChange?: (
+    state: 'default' | 'onstart' | 'expanded' | 'onend'
+  ) => void;
 };
 
 export const ExpandableContainer: React.FC<Props> = ({
@@ -64,8 +93,17 @@ export const ExpandableContainer: React.FC<Props> = ({
   const collapse = useCollapse(expandBy, 250);
 
   React.useEffect(() => {
-    if (onCollapseChange) onCollapseChange(collapse.isCollapse);
-  }, [collapse.isCollapse]);
+    if (onCollapseChange)
+      onCollapseChange(
+        collapse.onCollapseStart
+          ? 'onstart'
+          : collapse.onCollapseEnd
+          ? 'onend'
+          : collapse.isCollapse
+          ? 'expanded'
+          : 'default'
+      );
+  }, [collapse.isCollapse, collapse.onCollapseStart, collapse.onCollapseEnd]);
 
   return (
     <div className={clsx(classes.root, className)}>

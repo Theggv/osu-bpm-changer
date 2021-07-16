@@ -1,7 +1,7 @@
 import React from 'react';
 
 import InputAdornment from '@material-ui/core/InputAdornment';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
 
@@ -9,36 +9,49 @@ const useStyles = makeStyles((theme) => ({
   root: {
     margin: 10,
     borderColor: theme.palette.primary.light,
-
-    '& fieldset': {
-      borderColor: theme.palette.primary.light,
-      transition: 'all 0.2s ease',
-    },
-    '& .MuiOutlinedInput-root:hover': {
-      '& fieldset': {
-        borderColor: '#fff',
-      },
-    },
-    '& .MuiOutlinedInput-root:active': {
-      '& fieldset': {
-        borderColor: theme.palette.primary.light,
-      },
-    },
-    '& .Mui-focused': {
-      '& .MuiOutlinedInput-root:active': {
-        '& fieldset': {
-          borderColor: theme.palette.primary.light,
-        },
-      },
-    },
-    '& .MuiOutlinedInput-input': {
-      color: theme.palette.text.secondary,
-    },
   },
   icon: {
     color: theme.palette.primary.light,
   },
 }));
+
+const StyledTextField = withStyles((theme) => ({
+  root: {
+    '& fieldset': {
+      borderColor: theme.palette.primary.light,
+      transition: 'all 0.2s ease',
+    },
+    '&:hover': {
+      '& fieldset': {
+        borderColor: '#fff',
+      },
+      '& ::before': {
+        borderBottom: `1px solid ${theme.palette.primary.light}`,
+      },
+    },
+    '&:active': {
+      '& fieldset': {
+        borderColor: theme.palette.primary.light,
+      },
+    },
+    '& .Mui-focused': {
+      '&:active': {
+        '& fieldset': {
+          borderColor: theme.palette.primary.light,
+        },
+      },
+    },
+    '& .MuiInput-underline': {
+      color: theme.palette.text.secondary,
+    },
+    '& .MuiInput-underline:hover:not(.Mui-disabled):before': {
+      borderBottom: `2px solid ${theme.palette.primary.light}`,
+    },
+    '& ::before': {
+      borderBottom: `1px solid ${theme.palette.text.secondary}`,
+    },
+  },
+}))(TextField);
 
 interface SearchBarProps {
   placeholder?: string;
@@ -58,10 +71,9 @@ const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   return (
-    <TextField
+    <StyledTextField
       className={classes.root}
       id="input-with-icon-textfield"
-      variant={'outlined'}
       placeholder={placeholder}
       onChange={onChange}
       InputProps={{

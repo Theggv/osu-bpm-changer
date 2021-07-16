@@ -13,7 +13,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
     color: theme.palette.text.secondary,
-    backgroundColor: theme.palette.primary.dark,
     alignItems: 'center',
     width: 150,
   },

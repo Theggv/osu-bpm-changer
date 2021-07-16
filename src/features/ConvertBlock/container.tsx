@@ -21,7 +21,10 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     padding: 16,
     paddingTop: 32,
-    color: theme.palette.secondary.dark,
+    color: theme.palette.text.secondary,
+    backgroundColor: '#0004',
+    marginTop: 32,
+    marginBottom: 64,
   },
   block: {
     marginTop: 8,
@@ -80,9 +83,13 @@ const useInputBoolean = (initialValue: boolean) => {
 
 const StyledButton = withStyles((theme) => ({
   label: {
-    color: theme.palette.secondary.dark,
+    color: '#fff',
     fontWeight: 600,
     textTransform: 'none',
+  },
+  outlined: {
+    color: '#fff',
+    borderColor: '#fff',
   },
 }))(Button);
 
