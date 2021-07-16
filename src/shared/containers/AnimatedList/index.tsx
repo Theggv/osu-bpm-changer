@@ -1,11 +1,4 @@
-import React, {
-  createRef,
-  PropsWithChildren,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { PropsWithChildren, useEffect, useRef, useState } from 'react';
 import {
   AutoSizer,
   CellMeasurerCache,
@@ -18,10 +11,7 @@ import {
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { debounce, throttle } from 'lodash';
-import { useDebounce } from '../../utils/hooks/useDebounce';
-
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((_theme) => ({
   root: {
     display: 'flex',
     flex: 1,
@@ -49,15 +39,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const easeLinear = (delta: number) => {
-  return delta;
-};
-
 const easeOut = (delta: number) => {
   return 1 - Math.pow(1 - delta, 1.675);
 };
-
-const easeOutCubic = (delta: number) => --delta * delta * delta + 1;
 
 interface CacheableListProps<T = any> {
   cache: CellMeasurerCache;
@@ -81,7 +65,6 @@ const AnimatedList = <T,>({
   const [animationStartTime, setAnimationStartTime] = useState(0);
   const [scrollTopInitial, setScrollTopInitial] = useState(0);
   const [scrollTopFinal, setScrollTopFinal] = useState(0);
-  const [scrollStartTime, setScrollStartTime] = useState(0);
 
   const playAnimation = ({
     timingFunction,
@@ -128,34 +111,7 @@ const AnimatedList = <T,>({
     setAnimationStartTime(performance.now());
   };
 
-  const scrollAnim = React.useCallback(
-    (initial: number, delta: number) => {
-      setScrollStartTime(1);
-
-      return playAnimation({
-        duration: 500,
-
-        draw: (progress) => {
-          listRef.current?.scrollToPosition(initial + delta * progress);
-        },
-        timingFunction: easeLinear,
-        onAninationEnd: () => {
-          setScrollStartTime(0);
-        },
-      });
-    },
-    [listRef.current]
-  );
-
-  const scrollAnimDebounced = useMemo(() => debounce(scrollAnim, 150), []);
-
   const onScroll = (ev: ScrollParams) => {
-    if (!scrollStartTime) {
-      // scrollAnimDebounced(
-      //   scrollTopInitial,
-      //   ev.scrollTop - scrollTopInitial > 0 ? 50 : -50
-      // );
-    }
     if (!animationStartTime) {
       setScrollTopInitial(ev.scrollTop);
     }

@@ -81,7 +81,7 @@ const useInputBoolean = (initialValue: boolean) => {
   };
 };
 
-const StyledButton = withStyles((theme) => ({
+const StyledButton = withStyles((_theme) => ({
   label: {
     color: '#fff',
     fontWeight: 600,

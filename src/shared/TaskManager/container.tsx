@@ -8,7 +8,7 @@ import { ExpandableContainer } from '../containers/AbsoluteExpandable';
 import DetailedContainer from './components/DetailedContainer';
 import { TaskMin } from './components/TaskMin';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((_theme) => ({
   root: {
     flex: 1,
   },

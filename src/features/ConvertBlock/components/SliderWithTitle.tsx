@@ -21,7 +21,7 @@ const useStyles = makeStyles({
   },
 });
 
-const StyledSlider = withStyles((theme) => ({
+const StyledSlider = withStyles((_theme) => ({
   root: {
     height: 2,
     padding: '15px 0',

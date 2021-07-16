@@ -4,7 +4,7 @@ import { AutoSizer, CellMeasurerCache, List } from 'react-virtualized';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((_theme) => ({
   root: {
     display: 'flex',
     flex: 1,

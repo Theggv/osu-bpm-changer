@@ -4,7 +4,6 @@
  */
 
 @import '../shared/TaskManager/styles.css';
-@import '../features/RightBlock/styles.css';
 
 html {
   height: 100%;

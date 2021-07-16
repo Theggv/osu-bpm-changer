@@ -26,7 +26,7 @@ const useStyles = makeStyles({
   },
 });
 
-const StyledSlider = withStyles((theme) => ({
+const StyledSlider = withStyles((_theme) => ({
   root: {
     color: '#3880ff',
     height: 2,

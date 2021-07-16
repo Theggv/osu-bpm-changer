@@ -1,7 +1,7 @@
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { withStyles } from '@material-ui/core/styles';
 
-const StyledLinearProgress = withStyles((theme) => ({
+const StyledLinearProgress = withStyles((_theme) => ({
   colorSecondary: {
     backgroundColor: '#fff',
   },

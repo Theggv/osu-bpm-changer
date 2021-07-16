@@ -1,28 +1,26 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import clsx from 'clsx';
 import { remote } from 'electron';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import {
-  setFolder,
-  setLoading,
-  setValid,
-  selectOsuFolder,
-  selectIsLoading,
-  selectIsValid,
-} from './ducks';
-
-import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import CheckIcon from '@material-ui/icons/Check';
+import CreateNewFolderIcon from '@material-ui/icons/CreateNewFolder';
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
+import RefreshIcon from '@material-ui/icons/Refresh';
 
 import { isOsuFolder, tryFindOsuFolder } from '../../shared/Osu/OsuUtils';
-
-import RefreshIcon from '@material-ui/icons/Refresh';
-import CheckIcon from '@material-ui/icons/Check';
-import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
-import CreateNewFolderIcon from '@material-ui/icons/CreateNewFolder';
+import {
+  selectIsLoading,
+  selectIsValid,
+  selectOsuFolder,
+  setFolder,
+  setLoading,
+  setValid,
+} from './ducks';
 
 const useStyles = makeStyles((theme) => ({
   root: {

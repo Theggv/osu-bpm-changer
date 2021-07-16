@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { CellMeasurerCache, List } from 'react-virtualized';
+import { CellMeasurerCache } from 'react-virtualized';
 
 import { selectSearchString, setSearchResults } from '../BeatmapSetsSearchBar';
 import AnimatedList from '../containers/AnimatedList';
@@ -9,7 +9,6 @@ import BeatmapView, { BeatmapViewProps } from './components/BeatmapView';
 import {
   loadSongsList,
   selectBeatmapSetsSorted,
-  selectIsLoading,
   selectSelectedDiff,
   selectSelectedSet,
   setSelectedDiff,
@@ -29,9 +28,7 @@ const BeatmapSetsList: React.FC = () => {
   const songs = useSelector(selectBeatmapSetsSorted);
   const selectedSet = useSelector(selectSelectedSet);
   const selectedDiff = useSelector(selectSelectedDiff);
-  const isLoading = useSelector(selectIsLoading);
 
-  const listRef = React.useRef<List>(null);
   const [scrollToRow, setScrollToRow] = useState<number | undefined>(undefined);
 
   const [shouldUpdateScroll, setShouldUpdateScroll] = React.useState(false);
