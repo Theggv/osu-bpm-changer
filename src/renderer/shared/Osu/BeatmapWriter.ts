@@ -180,6 +180,11 @@ export class OsuBeatmapWriter {
 
     const type = typeof value;
 
+    // NaN check
+    if (type === 'number' || type === 'boolean') {
+      if (isNaN(Number(type))) return '';
+    }
+
     if (type === 'boolean') return Number(value);
 
     return value;
