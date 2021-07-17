@@ -1,13 +1,14 @@
-import { Beatmap } from '../Osu/Beatmap';
+import { Beatmap } from '../../../shared/Osu';
+import { TaskContext, TaskState } from '../ducks';
 import { BeatmapConverter } from './BeatmapConverter';
-import { ConvertTask, ConvertTaskDetails } from './ConvertTask';
+import { ConvertTask } from './ConvertTask';
 import { CancelError, Task } from './Task';
 
-export class ConvertManager {
+export class TaskManager {
   /**
    * Singleton instance
    */
-  private static instance?: ConvertManager;
+  private static instance?: TaskManager;
 
   private static idGenerator: number = 1;
 
@@ -21,26 +22,24 @@ export class ConvertManager {
    * Access to singleton instance
    * @returns ConvertManager
    */
-  public static use(): ConvertManager {
-    if (!ConvertManager.instance)
-      ConvertManager.instance = new ConvertManager();
+  public static use(): TaskManager {
+    if (!TaskManager.instance) TaskManager.instance = new TaskManager();
 
-    return ConvertManager.instance;
+    return TaskManager.instance;
   }
 
-  public create(details: ConvertTaskDetails): number {
+  public create(context: TaskContext): number {
     const taskInfo: ConvertTask = {
-      id: ConvertManager.idGenerator++,
-      status: 'pending',
-      details,
+      id: TaskManager.idGenerator++,
+      context,
     };
 
     const promise: Task<Beatmap> = BeatmapConverter.use(
-      details.beatmapFolder,
-      details.beatmap,
-      details.options
+      context.beatmapFolder,
+      context.beatmap,
+      context.options
     )
-      .change(details.convertType, details.convertValue)
+      .change(context.convertType, context.convertValue)
       .withProgress(
         (value) => taskInfo.onProgress && taskInfo.onProgress(value)
       );
@@ -49,8 +48,6 @@ export class ConvertManager {
       taskInfo,
       promise,
     });
-
-    this.startTask(taskInfo.id);
 
     return taskInfo.id;
   }
@@ -67,6 +64,10 @@ export class ConvertManager {
     task.promise.cancel();
   }
 
+  public start(id: number) {
+    this.startTask(id);
+  }
+
   private async startTask(id: number) {
     const task = this.tasks.get(id);
     if (!task) return;
@@ -78,12 +79,16 @@ export class ConvertManager {
     } catch (error) {
       if (error instanceof CancelError)
         this.setStatus(task.taskInfo, 'canceled');
-      else this.setStatus(task.taskInfo, 'error');
+      else this.setStatus(task.taskInfo, 'error', (error as any).message);
     }
   }
 
-  private setStatus(taskInfo: ConvertTask, status: ConvertTask['status']) {
-    taskInfo.status = status;
-    if (taskInfo.onStatusChanged) taskInfo.onStatusChanged(status);
+  private setStatus(
+    taskInfo: ConvertTask,
+    status: TaskState['status'],
+    errorMessage?: TaskState['errorMessage']
+  ) {
+    if (taskInfo.onStatusChanged)
+      taskInfo.onStatusChanged(status, errorMessage);
   }
 }

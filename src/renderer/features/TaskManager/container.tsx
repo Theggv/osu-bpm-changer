@@ -4,7 +4,7 @@ import { CSSTransition } from 'react-transition-group';
 
 import { makeStyles } from '@material-ui/core/styles';
 
-import { ExpandableContainer } from '../containers/AbsoluteExpandable';
+import { ExpandableContainer } from '../../shared/containers/AbsoluteExpandable';
 import DetailedContainer from './components/DetailedContainer';
 import { TaskMin } from './components/TaskMin';
 

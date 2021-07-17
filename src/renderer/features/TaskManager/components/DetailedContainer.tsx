@@ -8,8 +8,7 @@ import { CellMeasurerCache } from 'react-virtualized';
 
 import { makeStyles } from '@material-ui/core/styles';
 
-import CacheableListWithColumns from '../../containers/CacheableListWithColumns';
-import { ConvertManager } from '../../ConvertManager';
+import CacheableListWithColumns from '../../../shared/containers/CacheableListWithColumns';
 import { selectTasks } from '../ducks';
 import { TaskDetailed } from './TaskDetailed';
 
@@ -78,13 +77,11 @@ const DetailedContainer: React.FC<DetailedContainerProps> = ({
           items={tasks}
           cache={cache}
           renderer={(item) => {
-            const details = ConvertManager.use().get(item.taskId)?.details;
-
-            return details ? (
+            return (
               <div className={classes.container} key={item.taskId}>
-                <TaskDetailed taskDetails={details} taskState={item} />
+                <TaskDetailed taskState={item} />
               </div>
-            ) : null;
+            );
           }}
         />
       </div>

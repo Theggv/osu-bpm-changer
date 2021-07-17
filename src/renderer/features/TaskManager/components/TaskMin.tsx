@@ -5,12 +5,10 @@ import { useSelector } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
 
-import { selectSelectedDiff } from '../../BeatmapSetsList';
-import StyledLinearProgress from '../../components/StyledLinearProgress';
-import { ConvertManager } from '../../ConvertManager';
-import { ConvertTask } from '../../ConvertManager/ConvertTask';
-import { selectSongsFolder } from '../../selectors/OsuFolder';
-import { selectTasks } from '../ducks';
+import { selectSelectedDiff } from '../../../shared/BeatmapSetsList';
+import StyledLinearProgress from '../../../shared/components/StyledLinearProgress';
+import { selectSongsFolder } from '../../../shared/selectors/OsuFolder';
+import { selectTasks, TaskState } from '../ducks';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -65,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
 export const TaskMin: React.FC = () => {
   const classes = useStyles();
 
-  const [currentTask, setCurrentTask] = React.useState<ConvertTask | undefined>(
+  const [currentTask, setCurrentTask] = React.useState<TaskState | undefined>(
     undefined
   );
 
@@ -80,9 +78,7 @@ export const TaskMin: React.FC = () => {
     // Низкий - остальное
     // Сортировка по id (первые первыми)
 
-    const lowPriority = tasks.map((task) =>
-      ConvertManager.use().get(task.taskId)
-    );
+    const lowPriority = tasks;
 
     const mediumPriority = lowPriority.filter((task) => {
       return task?.status === 'running';
@@ -90,14 +86,14 @@ export const TaskMin: React.FC = () => {
 
     const highPriority = mediumPriority.filter((task) => {
       return (
-        task?.details.beatmapFolder ===
+        task?.context.beatmapFolder ===
         path.join(songsFolder, selectedDiff.beatmapSet?.folderName || '')
       );
     });
 
     const highestPriority = highPriority.filter((task) => {
       return (
-        task?.details.beatmap.metadata.Version ===
+        task?.context.beatmap.metadata.Version ===
         selectedDiff.difficulty?.metadata.Version
       );
     });
@@ -117,7 +113,7 @@ export const TaskMin: React.FC = () => {
 
   if (!currentTask) return null;
 
-  const taskState = tasks.find((x) => x.taskId === currentTask.id);
+  const taskState = tasks.find((x) => x.taskId === currentTask.taskId);
 
   return (
     <div className={classes.root}>
@@ -144,13 +140,13 @@ export const TaskMin: React.FC = () => {
       </div>
       <div className={classes.bottom}>
         <div>
-          {currentTask.details.beatmap.metadata.Artist} -{' '}
-          {currentTask.details.beatmap.metadata.Title} [
-          {currentTask.details.beatmap.metadata.Version}]
+          {currentTask.context.beatmap.metadata.Artist} -{' '}
+          {currentTask.context.beatmap.metadata.Title} [
+          {currentTask.context.beatmap.metadata.Version}]
         </div>
         <div>
-          {currentTask.details.convertValue}
-          {currentTask.details.convertType === 'bpm' ? 'BPM' : 'x'}
+          {currentTask.context.convertValue}
+          {currentTask.context.convertType === 'bpm' ? 'BPM' : 'x'}
         </div>
         <div>{taskState?.status}</div>
       </div>

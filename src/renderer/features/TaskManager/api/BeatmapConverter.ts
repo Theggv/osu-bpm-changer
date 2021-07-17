@@ -3,24 +3,28 @@ import fs from 'fs';
 import { cloneDeep } from 'lodash';
 import path from 'path';
 
-import { Beatmap } from '../Osu/Beatmap';
-import { OsuBeatmapWriter } from '../Osu/BeatmapWriter';
-import { generateFileName } from '../Osu/OsuUtils';
-import { ConvertTaskDetails } from './ConvertTask';
-import { analyzeBPM, changeBPM, multiplyBPM } from './SpeedChanger';
+import {
+  analyzeBPM,
+  Beatmap,
+  changeBPM,
+  generateFileName,
+  multiplyBPM,
+  OsuBeatmapWriter,
+} from '../../../shared/Osu';
+import { TaskContext } from '../ducks';
 import { Task } from './Task';
 
 export class BeatmapConverter {
-  private beatmapFolder: ConvertTaskDetails['beatmapFolder'];
-  private beatmap: ConvertTaskDetails['beatmap'];
-  private options?: ConvertTaskDetails['options'];
+  private beatmapFolder: TaskContext['beatmapFolder'];
+  private beatmap: TaskContext['beatmap'];
+  private options?: TaskContext['options'];
 
   private tempFilesForCleanup: string[];
   private tempFilesFull: string[];
 
   private constructor(
-    beatmapFolder: ConvertTaskDetails['beatmapFolder'],
-    beatmap: ConvertTaskDetails['beatmap'],
+    beatmapFolder: TaskContext['beatmapFolder'],
+    beatmap: TaskContext['beatmap'],
     options?: {
       circleSize: number;
       approachRate: number;
@@ -37,8 +41,8 @@ export class BeatmapConverter {
   }
 
   public static use(
-    beatmapFolder: ConvertTaskDetails['beatmapFolder'],
-    beatmap: ConvertTaskDetails['beatmap'],
+    beatmapFolder: TaskContext['beatmapFolder'],
+    beatmap: TaskContext['beatmap'],
     options?: {
       circleSize: number;
       approachRate: number;
@@ -50,8 +54,8 @@ export class BeatmapConverter {
   }
 
   public change(
-    type: ConvertTaskDetails['convertType'],
-    value: ConvertTaskDetails['convertValue']
+    type: TaskContext['convertType'],
+    value: TaskContext['convertValue']
   ): Task<Beatmap> {
     return new Task(async (resolve, reject, progress, onCancel) => {
       const converted = cloneDeep(this.beatmap);
@@ -90,9 +94,9 @@ export class BeatmapConverter {
   }
 
   private convertMap(
-    type: ConvertTaskDetails['convertType'],
-    value: ConvertTaskDetails['convertValue'],
-    beatmap: ConvertTaskDetails['beatmap']
+    type: TaskContext['convertType'],
+    value: TaskContext['convertValue'],
+    beatmap: TaskContext['beatmap']
   ): Task<void> {
     return new Task((resolve, _reject, _progress, _onCancel) => {
       if (type === 'bpm') {
@@ -106,9 +110,9 @@ export class BeatmapConverter {
   }
 
   private async changeMetadata(
-    type: ConvertTaskDetails['convertType'],
-    value: ConvertTaskDetails['convertValue'],
-    beatmap: ConvertTaskDetails['beatmap']
+    type: TaskContext['convertType'],
+    value: TaskContext['convertValue'],
+    beatmap: TaskContext['beatmap']
   ): Promise<void> {
     const ratio =
       type === 'multiplier' ? value : value / analyzeBPM(this.beatmap).mean;
@@ -144,8 +148,8 @@ export class BeatmapConverter {
   }
 
   private convertSound(
-    type: ConvertTaskDetails['convertType'],
-    value: ConvertTaskDetails['convertValue']
+    type: TaskContext['convertType'],
+    value: TaskContext['convertValue']
   ): Task<void> {
     const ratio =
       type === 'multiplier' ? value : value / analyzeBPM(this.beatmap).mean;
@@ -259,7 +263,7 @@ export class BeatmapConverter {
             else if (args[0])
               [currentFrames, totalFrames] = args[0].split('/').map(Number);
 
-            if (oldProgress < currentFrames / totalFrames - 0.1) {
+            if (oldProgress < currentFrames / totalFrames - 0.05) {
               oldProgress = currentFrames / totalFrames;
               progress && progress(oldProgress * 100);
             }

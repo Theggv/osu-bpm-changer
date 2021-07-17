@@ -3,7 +3,9 @@ import {
   AddTaskAction,
   CreateTaskAction,
   SetProgressAction,
+  SetRunningTasksAction,
   SetStatusAction,
+  StartTaskAction,
 } from './actions';
 
 export const createTask = (
@@ -18,6 +20,13 @@ export const addTask = (payload: AddTaskAction['payload']): AddTaskAction => ({
   payload,
 });
 
+export const startTask = (
+  payload: StartTaskAction['payload']
+): StartTaskAction => ({
+  type: ActionTypes.START_TASK,
+  payload,
+});
+
 export const setStatus = (
   payload: SetStatusAction['payload']
 ): SetStatusAction => ({
@@ -29,5 +38,12 @@ export const setProgress = (
   payload: SetProgressAction['payload']
 ): SetProgressAction => ({
   type: ActionTypes.SET_PROGRESS,
+  payload,
+});
+
+export const setRunningTasks = (
+  payload: SetRunningTasksAction['payload']
+): SetRunningTasksAction => ({
+  type: ActionTypes.SET_RUNNING_TASKS,
   payload,
 });

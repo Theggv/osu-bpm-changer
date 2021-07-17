@@ -12,7 +12,7 @@ import CreateNewFolderIcon from '@material-ui/icons/CreateNewFolder';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
-import { isOsuFolder, tryFindOsuFolder } from '../../shared/Osu/OsuUtils';
+import { isOsuFolder, tryFindOsuFolder } from '../../shared/Osu';
 import {
   selectIsLoading,
   selectIsValid,

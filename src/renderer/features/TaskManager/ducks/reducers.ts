@@ -1,9 +1,11 @@
 import produce, { Draft } from 'immer';
+
 import { Actions, ActionTypes } from './actions';
 import { TaskManagerState } from './types';
 
 const initialState: TaskManagerState = {
   tasks: [],
+  runningTasks: [],
 };
 
 export const reducer = produce(
@@ -32,6 +34,10 @@ export const reducer = produce(
 
           return task;
         });
+        break;
+
+      case ActionTypes.SET_RUNNING_TASKS:
+        draft.runningTasks = action.payload;
         break;
 
       default:

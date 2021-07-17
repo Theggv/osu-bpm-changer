@@ -9,7 +9,7 @@ import OsuFolder from '../../features/OsuFolder';
 import BeatmapSetsSearchBar from '../../shared/BeatmapSetsSearchBar';
 import BeatmapSetsFilterResults from '../../shared/components/BeatmapSetsFilterResults';
 import BackgroundContainer from '../../shared/containers/BackgroundContainer';
-import TaskManager from '../../shared/TaskManager';
+import TaskManager from '../../features/TaskManager';
 
 const useStyles = makeStyles((_theme) => ({
   root: {

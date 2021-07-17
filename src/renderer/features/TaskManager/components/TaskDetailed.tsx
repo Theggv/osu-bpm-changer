@@ -6,8 +6,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
 import ClearIcon from '@material-ui/icons/Clear';
 
-import { ConvertTask } from '../../../shared/ConvertManager/ConvertTask';
-import StyledLinearProgress from '../../components/StyledLinearProgress';
+import StyledLinearProgress from '../../../shared/components/StyledLinearProgress';
 import { setStatus, TaskState } from '../ducks';
 
 const useStyles = makeStyles((_theme) => ({
@@ -74,22 +73,20 @@ const useStyles = makeStyles((_theme) => ({
 
 interface TaskProps {
   taskState: TaskState;
-  taskDetails: ConvertTask['details'];
 }
 
-export const TaskDetailed: React.FC<TaskProps> = ({
-  taskDetails,
-  taskState,
-}) => {
+export const TaskDetailed: React.FC<TaskProps> = ({ taskState }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
+  const { context, progress, status } = taskState;
+
   const cancelTask = () => {
     if (
-      taskState.status !== 'canceled' &&
-      taskState.status !== 'error' &&
-      taskState.status !== 'done' &&
-      taskState.status !== 'closed'
+      status !== 'canceled' &&
+      status !== 'error' &&
+      status !== 'done' &&
+      status !== 'closed'
     ) {
       dispatch(
         setStatus({
@@ -103,32 +100,29 @@ export const TaskDetailed: React.FC<TaskProps> = ({
   return (
     <div className={classes.root}>
       <div className={classes.title}>
-        {taskDetails.beatmap.metadata.Artist} -{' '}
-        {taskDetails.beatmap.metadata.Title} [
-        {taskDetails.beatmap.metadata.Version}]
+        {context.beatmap.metadata.Artist} - {context.beatmap.metadata.Title} [
+        {context.beatmap.metadata.Version}]
       </div>
       <div className={classes.status}>
         <div>
-          {taskDetails.convertValue}
-          {taskDetails.convertType === 'bpm' ? 'BPM' : 'x'}
+          {context.convertValue}
+          {context.convertType === 'bpm' ? 'BPM' : 'x'}
         </div>
-        <div>{taskState.status}</div>
+        <div>{status}</div>
       </div>
       <div className={classes.progressContainer}>
         <StyledLinearProgress
           className={clsx(
             classes.progress,
-            taskState.status === 'canceled' && classes.canceled,
-            taskState.status === 'error' && classes.error,
-            taskState.status === 'done' && classes.done
+            status === 'canceled' && classes.canceled,
+            status === 'error' && classes.error,
+            status === 'done' && classes.done
           )}
           variant={'determinate'}
           value={
-            taskState.status === 'canceled' ||
-            taskState.status === 'error' ||
-            taskState.status === 'done'
+            status === 'canceled' || status === 'error' || status === 'done'
               ? 100
-              : taskState.progress
+              : progress
           }
           color={'secondary'}
         />

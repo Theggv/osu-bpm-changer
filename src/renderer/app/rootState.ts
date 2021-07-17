@@ -1,7 +1,7 @@
 import { OsuFolderState } from '../features/OsuFolder';
+import { TaskManagerState } from '../features/TaskManager';
 import { BeatmapSetsListState } from '../shared/BeatmapSetsList';
 import { FilterState } from '../shared/BeatmapSetsSearchBar';
-import { TaskManagerState } from '../shared/TaskManager';
 
 export interface RootState {
   osuFolderState: OsuFolderState;

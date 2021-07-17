@@ -1,8 +1,8 @@
-import { Beatmap, TimingPoint } from '../Osu/Beatmap';
-import { HitObjectType } from '../Osu/Beatmap/HitObjects/HitObject';
-import { HitObjectHold } from '../Osu/Beatmap/HitObjects/HitObjectHold';
-import { HitObjectSpinner } from '../Osu/Beatmap/HitObjects/HitObjectSpinner';
-import { EventBreak } from '../Osu/Beatmap/Sections/EventsSection';
+import { Beatmap, TimingPoint } from './Beatmap';
+import { HitObjectType } from './Beatmap/HitObjects/HitObject';
+import { HitObjectHold } from './Beatmap/HitObjects/HitObjectHold';
+import { HitObjectSpinner } from './Beatmap/HitObjects/HitObjectSpinner';
+import { EventBreak } from './Beatmap/Sections/EventsSection';
 
 export interface BPMAnalytics {
   min: number;

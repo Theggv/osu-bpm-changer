@@ -74,44 +74,4 @@ export class Task<ValueType> extends PLazy<ValueType> {
     this.onProgress(handler);
     return this;
   }
-
-  //   then<TResult1 = ValueType, TResult2 = never>(
-  //     onfulfilled?:
-  //       | ((value: ValueType) => TResult1 | PromiseLike<TResult1>)
-  //       | undefined
-  //       | null,
-  //     onrejected?:
-  //       | ((reason: any) => TResult2 | PromiseLike<TResult2>)
-  //       | undefined
-  //       | null
-  //   ): Promise<TResult1 | TResult2> {
-  //     this.status = 'running';
-
-  //     const patchedFulfilled = onfulfilled
-  //       ? (value: ValueType): TResult1 | PromiseLike<TResult1> => {
-  //           this.status = 'done';
-  //           return onfulfilled(value);
-  //         }
-  //       : onfulfilled;
-
-  //     const patchedRejected = onrejected
-  //       ? (reason: any): TResult2 | PromiseLike<TResult2> => {
-  //           if (this.isCancelled) this.status = 'canceled';
-  //           else this.status = 'error';
-
-  //           return onrejected(reason);
-  //         }
-  //       : onrejected;
-
-  //     return super.then(patchedFulfilled, patchedRejected);
-  //   }
-
-  //   catch<TResult = never>(
-  //     onrejected?:
-  //       | ((reason: any) => TResult | PromiseLike<TResult>)
-  //       | undefined
-  //       | null
-  //   ): Promise<ValueType | TResult> {
-  //     return super.catch(onrejected);
-  //   }
 }

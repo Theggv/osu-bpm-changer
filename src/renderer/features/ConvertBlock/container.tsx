@@ -7,9 +7,9 @@ import Button from '@material-ui/core/Button';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 
 import { selectSelectedDiff } from '../../shared/BeatmapSetsList';
-import { analyzeBPM } from '../../shared/ConvertManager/SpeedChanger';
+import { analyzeBPM } from '../../shared/Osu';
 import { selectSongsFolder } from '../../shared/selectors/OsuFolder';
-import { createTask } from '../../shared/TaskManager';
+import { createTask } from '../TaskManager';
 import SliderWithInput from './components/SliderWithInput';
 import SliderWithTitle from './components/SliderWithTitle';
 import TypeSwitcher from './components/TypeSwitcher';
