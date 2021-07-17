@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 14,
     display: 'flex',
     itemsAlign: 'center',
-    marginBottom: 2,
+    marginBottom: 3,
   },
   difficulty: {
     fontSize: 14,
