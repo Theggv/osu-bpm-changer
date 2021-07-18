@@ -176,14 +176,9 @@ export class OsuBeatmapWriter {
   }
 
   private convertValue(value: any): any {
-    if (value === undefined || value === null) return '';
+    if (value === undefined || value === null || value === 'NaN') return '';
 
     const type = typeof value;
-
-    // NaN check
-    if (type === 'number' || type === 'boolean') {
-      if (isNaN(Number(type))) return '';
-    }
 
     if (type === 'boolean') return Number(value);
 
