@@ -18,7 +18,7 @@ export class EventBackground implements BeatmapEvent {
   xOffset: number;
   yOffset: number;
 
-  constructor(filename: string, xOffset: number, yOffset: number) {
+  constructor(filename: string, xOffset: number = 0, yOffset: number = 0) {
     this.eventType = 0;
     this.startTime = 0;
     this.filename = filename;
@@ -44,8 +44,8 @@ export class EventVideo implements BeatmapEvent {
   constructor(
     startTime: number,
     filename: string,
-    xOffset: number,
-    yOffset: number
+    xOffset: number = 0,
+    yOffset: number = 0
   ) {
     this.eventType = 1;
     this.startTime = startTime;
