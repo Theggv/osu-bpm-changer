@@ -14,13 +14,14 @@ import SliderWithInput from './components/SliderWithInput';
 import SliderWithTitle from './components/SliderWithTitle';
 import TypeSwitcher from './components/TypeSwitcher';
 
+import { shell } from 'electron';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
     padding: 16,
-    paddingTop: 32,
     color: theme.palette.text.secondary,
     backgroundColor: '#0004',
     marginTop: 32,
@@ -38,9 +39,8 @@ const useStyles = makeStyles((theme) => ({
   footer: {
     flex: 1,
     display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   buttonConvert: {
     width: 125,
@@ -82,6 +82,9 @@ const useInputBoolean = (initialValue: boolean) => {
 };
 
 const StyledButton = withStyles((_theme) => ({
+  root: {
+    minWidth: 150,
+  },
   label: {
     color: '#fff',
     fontWeight: 600,
@@ -125,6 +128,12 @@ const ConvertBlock: React.FC = () => {
   if (!currentBeatmap.difficulty) return null;
 
   const beatmapBPM = analyzeBPM(currentBeatmap.difficulty);
+
+  const onOpenDir = () => {
+    shell.openPath(
+      path.join(osuSongsFolder, currentBeatmap.beatmapSet!.folderName)
+    );
+  };
 
   // Create task on button click
   const onClickConvert = () => {
@@ -191,6 +200,13 @@ const ConvertBlock: React.FC = () => {
         {...inputValue.bind}
       />
       <div className={classes.footer}>
+        <StyledButton
+          className={classes.buttonConvert}
+          variant={'outlined'}
+          onClick={onOpenDir}
+        >
+          Open directory
+        </StyledButton>
         <StyledButton
           className={classes.buttonConvert}
           variant={'outlined'}

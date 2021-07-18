@@ -4,6 +4,7 @@ export {
   BeatmapSetsListReducer,
   BeatmapSetListSaga,
   BeatmapSetsListState,
+  BeatmapSet,
 } from './ducks';
 
 export * from './ducks/selectors';

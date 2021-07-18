@@ -2,6 +2,7 @@ import {
   ActionTypes,
   AddTaskAction,
   CreateTaskAction,
+  RemoveTaskAction,
   SetProgressAction,
   SetRunningTasksAction,
   SetStatusAction,
@@ -24,6 +25,13 @@ export const startTask = (
   payload: StartTaskAction['payload']
 ): StartTaskAction => ({
   type: ActionTypes.START_TASK,
+  payload,
+});
+
+export const removeTask = (
+  payload: RemoveTaskAction['payload']
+): RemoveTaskAction => ({
+  type: ActionTypes.REMOVE_TASK,
   payload,
 });
 

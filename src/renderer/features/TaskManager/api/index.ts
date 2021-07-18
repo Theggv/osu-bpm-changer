@@ -12,7 +12,7 @@ export class TaskManager {
 
   private static idGenerator: number = 1;
 
-  private tasks: Map<number, { taskInfo: ConvertTask; promise: Task<Beatmap> }>;
+  private tasks: Map<number, { taskInfo: ConvertTask; promise: Task<void> }>;
 
   private constructor() {
     this.tasks = new Map();
@@ -34,7 +34,7 @@ export class TaskManager {
       context,
     };
 
-    const promise: Task<Beatmap> = BeatmapConverter.use(
+    const promise = BeatmapConverter.use(
       context.beatmapFolder,
       context.beatmap,
       context.options

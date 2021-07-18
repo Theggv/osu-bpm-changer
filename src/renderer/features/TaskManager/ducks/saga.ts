@@ -1,23 +1,20 @@
 import { isEqual } from 'lodash';
+import path from 'path';
 import { buffers, channel } from 'redux-saga';
-import {
-  all,
-  call,
-  fork,
-  put,
-  race,
-  select,
-  take,
-  takeEvery,
-} from 'redux-saga/effects';
+import { fork, put, race, select, take, takeEvery } from 'redux-saga/effects';
 
+import {
+  BeatmapSet,
+  loadDiffs,
+  selectSelectedSet,
+} from '../../../shared/BeatmapSetsList';
+import { selectSongsFolder } from '../../../shared/selectors/OsuFolder';
 import { TaskManager } from '../api';
 import {
   ActionTypes,
   AddTaskAction,
   CreateTaskAction,
   SetProgressAction,
-  SetRunningTasksAction,
   SetStatusAction,
   StartTaskAction,
 } from './actions';
@@ -25,8 +22,8 @@ import { addTask, setRunningTasks, setStatus, startTask } from './operations';
 import { selectRunningTasks, selectTasks } from './selectors';
 import { TaskState } from './types';
 
-const progressChannel = channel<SetProgressAction>(buffers.fixed(250));
-const statusChannel = channel<SetStatusAction>(buffers.fixed(100));
+const progressChannel = channel<SetProgressAction>(buffers.sliding(25));
+const statusChannel = channel<SetStatusAction>(buffers.expanding(25));
 
 function* createTaskWatcher(action: CreateTaskAction): any {
   const taskStates: TaskState[] = yield select(selectTasks);
@@ -35,16 +32,6 @@ function* createTaskWatcher(action: CreateTaskAction): any {
   if (taskStates.find((t) => isEqual(t.context, action.payload))) return;
 
   const taskId = TaskManager.use().create(action.payload);
-
-  // Add Task
-  yield put(
-    addTask({
-      taskId,
-      progress: 0,
-      status: 'pending',
-      context: action.payload,
-    })
-  );
 
   const task = TaskManager.use().get(taskId)!;
 
@@ -61,6 +48,16 @@ function* createTaskWatcher(action: CreateTaskAction): any {
       payload: { taskId, status, errorMessage },
     });
   };
+
+  // Add Task
+  yield put(
+    addTask({
+      taskId,
+      progress: 0,
+      status: 'pending',
+      context: action.payload,
+    })
+  );
 }
 
 function* taskManager(): any {
@@ -132,6 +129,20 @@ function* putChannelStatus(): any {
 function* statusWatcher(action: SetStatusAction): any {
   if (action.payload.status === 'canceled') {
     TaskManager.use().cancel(action.payload.taskId);
+  }
+  if (action.payload.status === 'done') {
+    // Update beatmapset on done
+    const selectedSet: BeatmapSet = yield select(selectSelectedSet);
+    const tasks: TaskState[] = yield select(selectTasks);
+    const songsFolder: string = yield select(selectSongsFolder);
+
+    if (
+      path.join(songsFolder, selectedSet.folderName) ===
+      tasks.find((t) => t.taskId === action.payload.taskId)?.context
+        .beatmapFolder
+    ) {
+      yield put(loadDiffs());
+    }
   }
 }
 

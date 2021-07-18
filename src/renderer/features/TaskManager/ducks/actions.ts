@@ -8,6 +8,7 @@ export enum ActionTypes {
   CREATE_TASK = 'TaskManager/CREATE_TASK',
   ADD_TASK = 'TaskManager/ADD_TASK',
   START_TASK = 'TaskManager/START_TASK',
+  REMOVE_TASK = 'TaskManager/REMOVE_TASK',
 
   SET_STATUS = 'TaskManager/SET_STATUS',
   SET_PROGRESS = 'TaskManager/SET_PROGRESS',
@@ -29,6 +30,11 @@ export interface AddTaskAction extends Action<ActionTypes> {
 
 export interface StartTaskAction extends Action<ActionTypes> {
   type: ActionTypes.START_TASK;
+  payload: TaskState['taskId'];
+}
+
+export interface RemoveTaskAction extends Action<ActionTypes> {
+  type: ActionTypes.REMOVE_TASK;
   payload: TaskState['taskId'];
 }
 
@@ -60,6 +66,7 @@ export type Actions =
   | CreateTaskAction
   | AddTaskAction
   | StartTaskAction
+  | RemoveTaskAction
   | SetStatusAction
   | SetProgressAction
   | SetRunningTasksAction;

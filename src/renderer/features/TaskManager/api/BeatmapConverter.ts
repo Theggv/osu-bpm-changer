@@ -56,7 +56,7 @@ export class BeatmapConverter {
   public change(
     type: TaskContext['convertType'],
     value: TaskContext['convertValue']
-  ): Task<Beatmap> {
+  ): Task<void> {
     return new Task(async (resolve, reject, progress, onCancel) => {
       const converted = cloneDeep(this.beatmap);
 
@@ -82,7 +82,7 @@ export class BeatmapConverter {
 
         await this.cleanup();
 
-        resolve(converted);
+        resolve();
       } catch (error) {
         try {
           await this.cleanup(true);
@@ -172,14 +172,6 @@ export class BeatmapConverter {
       '' + `-x${ratio.toFixed(2)}.mp3`
     );
 
-    this.tempFilesForCleanup = [
-      ...this.tempFilesForCleanup,
-      decodePath,
-      stretchPath,
-    ];
-
-    this.tempFilesFull = [...this.tempFilesForCleanup, encodePath];
-
     return new Task(async (resolve, reject, progress, onCancel) => {
       const decodeTask = this.useLame([
         '--decode',
@@ -210,6 +202,20 @@ export class BeatmapConverter {
       });
 
       try {
+        // We can skip step if converted sound file exists
+        if (fs.existsSync(encodePath)) {
+          resolve();
+          return;
+        }
+
+        this.tempFilesForCleanup = [
+          ...this.tempFilesForCleanup,
+          decodePath,
+          stretchPath,
+        ];
+
+        this.tempFilesFull = [...this.tempFilesForCleanup, encodePath];
+
         await decodeTask;
         progress(50);
         await stretchTask;
@@ -227,7 +233,7 @@ export class BeatmapConverter {
   private useLame(lameArgs: string[]): Task<void> {
     const lamePath = path.join(__dirname, '../assets/lame.exe');
 
-    return new Task((resolve, _, progress, onCancel) => {
+    return new Task((resolve, reject, progress, onCancel) => {
       const process = spawn(lamePath, lameArgs, {
         stdio: ['inherit'],
       });
@@ -249,7 +255,7 @@ export class BeatmapConverter {
 
         if (str) {
           if (str.includes('Error')) {
-            console.error(str);
+            reject(new Error(str));
           }
 
           const args = str
@@ -301,7 +307,6 @@ export class BeatmapConverter {
         this.tempFilesFull.forEach((file) => {
           fs.unlink(file, (err) => {
             if (err) reject(err);
-            resolve();
           });
         });
         this.tempFilesFull = [];
@@ -309,11 +314,11 @@ export class BeatmapConverter {
         this.tempFilesForCleanup.forEach((file) => {
           fs.unlink(file, (err) => {
             if (err) reject(err);
-            resolve();
           });
         });
-        this.tempFilesForCleanup = [];
       }
+      this.tempFilesForCleanup = [];
+      resolve();
     });
   }
 }

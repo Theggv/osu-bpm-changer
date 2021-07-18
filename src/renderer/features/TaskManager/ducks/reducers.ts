@@ -18,10 +18,16 @@ export const reducer = produce(
         draft.tasks = [...draft.tasks, action.payload];
         break;
 
+      case ActionTypes.REMOVE_TASK:
+        draft.tasks = draft.tasks.filter((t) => t.taskId !== action.payload);
+        break;
+
       case ActionTypes.SET_STATUS:
         draft.tasks = draft.tasks.map((task) => {
-          if (task.taskId === action.payload.taskId)
+          if (task.taskId === action.payload.taskId) {
             task.status = action.payload.status;
+            task.errorMessage = action.payload.errorMessage;
+          }
 
           return task;
         });
