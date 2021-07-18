@@ -18,12 +18,12 @@ export class EventBackground implements BeatmapEvent {
   xOffset: number;
   yOffset: number;
 
-  constructor(filename: string, xOffset: number = 0, yOffset: number = 0) {
+  constructor(filename: string, xOffset: number, yOffset: number) {
     this.eventType = 0;
     this.startTime = 0;
     this.filename = filename;
-    this.xOffset = xOffset;
-    this.yOffset = yOffset;
+    this.xOffset = isNaN(xOffset) ? 0 : xOffset;
+    this.yOffset = isNaN(yOffset) ? 0 : yOffset;
   }
 
   serialize(): string {
@@ -44,14 +44,14 @@ export class EventVideo implements BeatmapEvent {
   constructor(
     startTime: number,
     filename: string,
-    xOffset: number = 0,
-    yOffset: number = 0
+    xOffset: number,
+    yOffset: number
   ) {
     this.eventType = 1;
     this.startTime = startTime;
     this.filename = filename;
-    this.xOffset = xOffset;
-    this.yOffset = yOffset;
+    this.xOffset = isNaN(xOffset) ? 0 : xOffset;
+    this.yOffset = isNaN(yOffset) ? 0 : yOffset;
   }
 
   serialize(): string {
