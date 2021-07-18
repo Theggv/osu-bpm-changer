@@ -15,6 +15,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/app-root-path": "^1.2.4",
-    "@types/lodash": "^4.14.170"
+    "@types/lodash": "^4.14.170",
+    "@types/winreg": "^1.2.31"
   }
 }

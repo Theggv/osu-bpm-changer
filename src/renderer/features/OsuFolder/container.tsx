@@ -12,7 +12,7 @@ import CreateNewFolderIcon from '@material-ui/icons/CreateNewFolder';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
-import { isOsuFolder, tryFindOsuFolder } from '../../shared/Osu';
+import { isOsuFolder } from '../../shared/Osu';
 import {
   selectIsLoading,
   selectIsValid,
@@ -78,20 +78,6 @@ const useOpenFileDialog = () => {
 
   const tryFindPath = async () => {
     dispatch(setLoading(true));
-    dispatch(setValid(false));
-
-    const folder = await tryFindOsuFolder();
-
-    dispatch(setLoading(false));
-
-    if (folder) {
-      try {
-        dispatch(setFolder(folder));
-        dispatch(setValid(await isOsuFolder(folder)));
-      } catch (err) {
-        dispatch(setValid(false));
-      }
-    }
   };
 
   const clickFileDialog = (
@@ -104,15 +90,18 @@ const useOpenFileDialog = () => {
         properties: ['openDirectory'],
       })
       .then(async (result) => {
-        dispatch(setLoading(false));
-
-        if (!result.filePaths.length) return;
+        if (!result.filePaths.length) {
+          dispatch(setLoading(false));
+        }
 
         dispatch(setValid(false));
         dispatch(setFolder(result.filePaths[0]));
 
         isOsuFolder(result.filePaths[0])
-          .then((value) => dispatch(setValid(value)))
+          .then((value) => {
+            dispatch(setValid(value));
+            dispatch(setLoading(false));
+          })
           .catch((err) => console.error(err));
       })
       .catch((err) => console.error(err));

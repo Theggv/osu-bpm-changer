@@ -1,26 +1,8 @@
-import find from 'find-process';
 import fs from 'fs';
 import path from 'path';
 
 import { Beatmap } from './Beatmap';
 import { BeatmapSetFolder } from './BeatmapSet';
-
-export const tryFindOsuFolder = async (): Promise<string | null> => {
-  try {
-    const res = await find('name', 'osu!', true);
-
-    if (!res || !res.length) return null;
-
-    const base = res[0].cmd.replace('"', '');
-
-    const songsPath = path.join(base.substring(0, base.indexOf('osu!.exe')));
-
-    return songsPath;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-};
 
 /**
  * Read songs from osu!/Songs folder

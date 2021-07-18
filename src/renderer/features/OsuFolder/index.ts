@@ -1,6 +1,6 @@
 import OsuFolder from './container';
 
-export { OsuFolderReducer, OsuFolderState } from './ducks';
+export { OsuFolderReducer, OsuFolderState, OsuFolderSaga } from './ducks';
 
 export * from './ducks/selectors';
 
