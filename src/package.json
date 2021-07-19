@@ -1,7 +1,7 @@
 {
   "name": "osu-bpm-changer",
   "productName": "OsuBPMChanger",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Osu! BPM Changer",
   "main": "./main.prod.js",
   "author": {
